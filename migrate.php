@@ -82,6 +82,10 @@ try {
             echo json_encode(migrateTerms());
             break;
 
+        case 'migrate_subjects':
+            echo json_encode(migrateSubjects());
+            break;
+
         default:
             throw new Exception('Invalid action specified');
     }
@@ -822,6 +826,167 @@ function migrateTerms() {
         'updated' => $updated,
         'skipped' => $skipped,
         'message' => "Term sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped"
+    ];
+}
+
+/**
+ * Smart migrate subjects from JSS and SSS tables to CBT
+ * Ensures distinct subjects (no duplicates between JSS and SSS)
+ */
+function migrateSubjects() {
+    $connections = getDatabaseConnections();
+    $sfgs = $connections['sfgs'];
+    $cbt = $connections['cbt'];
+
+    logDetailedStep("🔍 Fetching subjects from JSS and SSS tables...");
+
+    // Get subjects from JSS table
+    $jssStmt = $sfgs->prepare("
+        SELECT DISTINCT jss_subjects as subject_name
+        FROM jss 
+        WHERE jss_subjects IS NOT NULL AND jss_subjects != ''
+        ORDER BY jss_subjects
+    ");
+    $jssStmt->execute();
+    $jssSubjects = $jssStmt->fetchAll();
+
+    logDetailedStep("📊 Found " . count($jssSubjects) . " subjects in JSS table");
+
+    // Get subjects from SSS table
+    $sssStmt = $sfgs->prepare("
+        SELECT DISTINCT sss_subjects as subject_name
+        FROM sss 
+        WHERE sss_subjects IS NOT NULL AND sss_subjects != ''
+        ORDER BY sss_subjects
+    ");
+    $sssStmt->execute();
+    $sssSubjects = $sssStmt->fetchAll();
+
+    logDetailedStep("📊 Found " . count($sssSubjects) . " subjects in SSS table");
+
+    // Combine and deduplicate subjects
+    $allSubjects = [];
+    foreach ($jssSubjects as $subject) {
+        $subjectName = trim($subject['subject_name']);
+        if (!empty($subjectName)) {
+            $allSubjects[strtolower($subjectName)] = $subjectName;
+        }
+    }
+    
+    foreach ($sssSubjects as $subject) {
+        $subjectName = trim($subject['subject_name']);
+        if (!empty($subjectName)) {
+            $allSubjects[strtolower($subjectName)] = $subjectName;
+        }
+    }
+
+    logDetailedStep("🔀 Combined and deduplicated to " . count($allSubjects) . " unique subjects");
+
+    logDetailedStep("🔍 Checking existing subjects in CBT database...");
+
+    // Get existing subjects from CBT
+    $existingStmt = $cbt->prepare("
+        SELECT name, code
+        FROM subjects
+    ");
+    $existingStmt->execute();
+    $existingSubjects = $existingStmt->fetchAll();
+
+    logDetailedStep("📊 Found " . count($existingSubjects) . " existing subjects in CBT");
+
+    // Create lookup array for existing subjects
+    $existingLookup = [];
+    foreach ($existingSubjects as $subject) {
+        $existingLookup[strtolower($subject['name'])] = $subject;
+    }
+
+    $inserted = 0;
+    $updated = 0;
+    $skipped = 0;
+
+    logDetailedStep("🔄 Starting subject synchronization process...");
+
+    foreach ($allSubjects as $lowerName => $subjectName) {
+        // Generate subject code (first 3 letters + number if needed)
+        $baseCode = strtoupper(substr(preg_replace('/[^a-zA-Z]/', '', $subjectName), 0, 3));
+        $subjectCode = $baseCode;
+        
+        // Ensure code uniqueness
+        $codeCounter = 1;
+        while (array_search($subjectCode, array_column($existingSubjects, 'code')) !== false) {
+            $subjectCode = $baseCode . $codeCounter;
+            $codeCounter++;
+        }
+
+        logDetailedStep("📚 Processing subject: {$subjectName} (Code: {$subjectCode})");
+
+        if (isset($existingLookup[$lowerName])) {
+            // Subject exists, check if data matches
+            $existing = $existingLookup[$lowerName];
+            if ($existing['name'] === $subjectName) {
+                logDetailedStep("✅ Subject {$subjectName} data is current - skipping");
+                $skipped++;
+                continue; // Data is correct, skip
+            } else {
+                logDetailedStep("🔄 Updating subject {$subjectName} with new data");
+
+                // Update existing record
+                $updateStmt = $cbt->prepare("
+                    UPDATE subjects SET 
+                        name = :name,
+                        updated_at = NOW()
+                    WHERE LOWER(name) = :lower_name
+                ");
+
+                $updateStmt->execute([
+                    'name' => $subjectName,
+                    'lower_name' => $lowerName
+                ]);
+
+                logDetailedStep("✅ Successfully updated subject {$subjectName}");
+                $updated++;
+            }
+        } else {
+            logDetailedStep("🆕 Creating new subject {$subjectName} with code {$subjectCode}");
+
+            // Insert new record
+            $insertStmt = $cbt->prepare("
+                INSERT INTO subjects (
+                    name, code, description, is_active, created_at
+                ) VALUES (
+                    :name, :code, :description, 1, NOW()
+                )
+            ");
+
+            $insertStmt->execute([
+                'name' => $subjectName,
+                'code' => $subjectCode,
+                'description' => "Subject migrated from SFGS system"
+            ]);
+
+            // Add to existing lookup to prevent duplicate codes
+            $existingSubjects[] = ['name' => $subjectName, 'code' => $subjectCode];
+
+            logDetailedStep("✅ Successfully created subject {$subjectName} with code {$subjectCode}");
+            $inserted++;
+        }
+    }
+
+    logDetailedStep("🎉 Subject synchronization complete!");
+
+    return [
+        'success' => true,
+        'count' => $inserted + $updated,
+        'inserted' => $inserted,
+        'updated' => $updated,
+        'skipped' => $skipped,
+        'message' => "Subject sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped",
+        'details' => [
+            'total_unique_subjects' => count($allSubjects),
+            'jss_subjects' => count($jssSubjects),
+            'sss_subjects' => count($sssSubjects),
+            'deduplication_note' => 'Subjects were combined and deduplicated from JSS and SSS tables'
+        ]
     ];
 }
 ?>

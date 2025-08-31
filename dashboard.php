@@ -1101,6 +1101,12 @@ $sessionInfo = getSessionInfo();
                                 <div class="mapping-target">cbt.terms</div>
                                 <div class="mapping-note">Term structure</div>
                             </div>
+                            <div class="mapping-item">
+                                <div class="mapping-source">sfgs.jss + sfgs.sss</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.subjects</div>
+                                <div class="mapping-note">Subjects (deduplicated)</div>
+                            </div>
                         </div>
                     </div>
 
@@ -1165,6 +1171,10 @@ $sessionInfo = getSessionInfo();
                     <div class="status-item" id="status-terms">
                         <div class="status-icon status-pending">⏳</div>
                         <span class="status-text">Terms Migration</span>
+                    </div>
+                    <div class="status-item" id="status-subjects">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Subjects Migration (JSS + SSS)</span>
                     </div>
                 </div>
 
@@ -1311,6 +1321,10 @@ $sessionInfo = getSessionInfo();
                     ${data.terms || 0}
                 </div>
                 <div class="summary-item">
+                    <strong>Subjects</strong>
+                    ${data.subjects || 0}
+                </div>
+                <div class="summary-item">
                     <strong>Passwords Hashed</strong>
                     ${data.passwords_hashed || 0}
                 </div>
@@ -1357,7 +1371,7 @@ $sessionInfo = getSessionInfo();
             updateProgress(0);
 
             // Reset all status indicators
-            ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms'].forEach(id => {
+            ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms', 'subjects'].forEach(id => {
                 updateStatus(id, 'pending');
             });
 
@@ -1422,6 +1436,18 @@ $sessionInfo = getSessionInfo();
                 const termResult = await callMigrationAPI('migrate_terms');
                 log(`✓ ${termResult.message}`, 'success');
                 updateStatus('terms', 'success');
+                updateProgress(85);
+
+                // Step 8: Migrate subjects
+                log('Synchronizing subjects from JSS and SSS tables...', 'info');
+                updateStatus('subjects', 'running');
+                const subjectResult = await callMigrationAPI('migrate_subjects');
+                log(`✓ ${subjectResult.message}`, 'success');
+                if (subjectResult.details) {
+                    log(`Combined ${subjectResult.details.jss_subjects} JSS + ${subjectResult.details.sss_subjects} SSS subjects`, 'info');
+                    log(`Deduplicated to ${subjectResult.details.total_unique_subjects} unique subjects`, 'info');
+                }
+                updateStatus('subjects', 'success');
                 updateProgress(95);
 
                 // Show completion summary
@@ -1443,6 +1469,7 @@ $sessionInfo = getSessionInfo();
                     classes: classResult.count,
                     sessions: sessionResult.count,
                     terms: termResult.count,
+                    subjects: subjectResult.count,
                     passwords_hashed: totalPasswordsHashed,
                     duration: duration
                 });
@@ -1451,7 +1478,7 @@ $sessionInfo = getSessionInfo();
                 log(`❌ Synchronization failed: ${error.message}`, 'error');
 
                 // Mark any running status as error
-                ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms'].forEach(id => {
+                ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms', 'subjects'].forEach(id => {
                     const statusElement = document.getElementById(`status-${id}`);
                     const icon = statusElement.querySelector('.status-icon');
                     if (icon.classList.contains('status-running')) {
