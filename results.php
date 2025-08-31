@@ -17,7 +17,7 @@ if ($_POST['action'] ?? '' === 'delete_result') {
         }
         
         $cbt = createConnection('cbt');
-        $stmt = $cbt->prepare("DELETE FROM results WHERE id = ?");
+        $stmt = $cbt->prepare("DELETE FROM test_results WHERE id = ?");
         $stmt->execute([$result_id]);
         
         echo json_encode(['success' => true, 'message' => 'Result deleted successfully']);
