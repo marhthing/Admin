@@ -464,13 +464,6 @@ $sessionInfo = getSessionInfo();
             font-size: 0.75rem;
         }
 
-        /* Dashboard Grid Layout */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -497,10 +490,7 @@ $sessionInfo = getSessionInfo();
                 padding-bottom: 5rem;
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
+
         }
 
         /* System Stats Section */
@@ -591,10 +581,7 @@ $sessionInfo = getSessionInfo();
                 gap: 0.75rem;
             }
 
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
+
 
             .mapping-item {
                 grid-template-columns: 1fr;
@@ -1042,8 +1029,7 @@ $sessionInfo = getSessionInfo();
 
 
             <!-- Database Status Section -->
-            <div class="status-overview">
-                <div class="db-status-card">
+            <div class="db-status-card">
                     <h3>Database Connection Status</h3>
                     <div class="db-connections">
                         <div class="db-connection" id="sfgs-status">
@@ -1070,8 +1056,7 @@ $sessionInfo = getSessionInfo();
             </div>
 
             <!-- Migration Controls Section -->
-            <div class="main-content">
-                <div class="migration-section">
+            <div class="migration-section">
                     <div class="migration-header">
                         <h3>Data Migration</h3>
                         <p>Intelligent synchronization between SFGS and CBT systems</p>
@@ -1083,7 +1068,7 @@ $sessionInfo = getSessionInfo();
                             <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
                         </div>
                         <div class="alert">
-                            <span class="alert-icon">⚠️</span>
+                            <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></span>
                             Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
                         </div>
                     </div>
@@ -1099,8 +1084,7 @@ $sessionInfo = getSessionInfo();
                     </div>
                 </div>
 
-                <div class="dashboard-grid">
-                    <div class="data-mapping-section">
+            <div class="data-mapping-section">
                         <h3>Data Mapping Overview</h3>
                         <div class="mapping-grid">
                             <div class="mapping-item">
@@ -1142,7 +1126,7 @@ $sessionInfo = getSessionInfo();
                         </div>
                     </div>
 
-                    <div class="system-stats-section">
+            <div class="system-stats-section">
                         <h3>System Statistics</h3>
                         <div class="stats-grid" id="systemStats">
                             <div class="stat-item">
@@ -1171,8 +1155,6 @@ $sessionInfo = getSessionInfo();
                             </button>
                         </div>
                     </div>
-                </div>
-            </div>
 
             <div class="status-section">
                 <h3>Migration Status & Detailed Logs</h3>
@@ -1222,9 +1204,9 @@ $sessionInfo = getSessionInfo();
 
                 <div class="log-container">
                     <div class="log-area" id="logArea">
-                        <div style="color: #94a3b8;">📋 Detailed migration logs will appear here...</div>
+                        <div style="color: #94a3b8;">Detailed migration logs will appear here...</div>
                         <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
-                        <div style="color: #fbbf24;">🔐 Note: All passwords will be converted from plain text to secure hash.</div>
+                        <div style="color: #fbbf24;">Note: All passwords will be converted from plain text to secure hash.</div>
                     </div>
                 </div>
             </div>
@@ -1403,8 +1385,8 @@ $sessionInfo = getSessionInfo();
                 updateStatus(id, 'pending');
             });
 
-            log('🚀 Starting secure smart synchronization process...', 'info');
-            log('🔐 Security Mode: All passwords will be hashed before insertion', 'security');
+            log('Starting secure smart synchronization process...', 'info');
+            log('Security Mode: All passwords will be hashed before insertion', 'security');
 
             try {
                 // Step 1: Test database connections
@@ -1420,7 +1402,7 @@ $sessionInfo = getSessionInfo();
                 updateStatus('admin', 'running');
                 const adminResult = await callMigrationAPI('migrate_admins');
                 log(`✓ ${adminResult.message}`, 'success');
-                log(`🔐 Hashed ${adminResult.details?.passwords_hashed || 0} admin passwords`, 'security');
+                log(`Hashed ${adminResult.details?.passwords_hashed || 0} admin passwords`, 'security');
                 updateStatus('admin', 'success');
                 updateProgress(20);
 
@@ -1429,7 +1411,7 @@ $sessionInfo = getSessionInfo();
                 updateStatus('teachers', 'running');
                 const teacherResult = await callMigrationAPI('migrate_teachers');
                 log(`✓ ${teacherResult.message}`, 'success');
-                log(`🔐 Hashed ${teacherResult.details?.passwords_hashed || 0} teacher passwords`, 'security');
+                log(`Hashed ${teacherResult.details?.passwords_hashed || 0} teacher passwords`, 'security');
                 updateStatus('teachers', 'success');
                 updateProgress(35);
 
@@ -1438,7 +1420,7 @@ $sessionInfo = getSessionInfo();
                 updateStatus('students', 'running');
                 const studentResult = await callMigrationAPI('migrate_students');
                 log(`✓ ${studentResult.message}`, 'success');
-                log(`🔐 Hashed ${studentResult.details?.passwords_hashed || 0} student passwords`, 'security');
+                log(`Hashed ${studentResult.details?.passwords_hashed || 0} student passwords`, 'security');
                 updateStatus('students', 'success');
                 updateProgress(50);
 
@@ -1473,8 +1455,8 @@ $sessionInfo = getSessionInfo();
                                            (teacherResult.details?.passwords_hashed || 0) + 
                                            (studentResult.details?.passwords_hashed || 0);
 
-                log('🎉 Secure smart synchronization completed successfully!', 'success');
-                log(`🔐 Total passwords securely hashed: ${totalPasswordsHashed}`, 'security');
+                log('Secure smart synchronization completed successfully!', 'success');
+                log(`Total passwords securely hashed: ${totalPasswordsHashed}`, 'security');
                 updateProgress(100);
 
                 showMigrationSummary({
@@ -1586,7 +1568,7 @@ $sessionInfo = getSessionInfo();
         window.onload = function() {
             startSessionTimer();
             log('System initialized and ready for secure synchronization.', 'info');
-            log('🔐 Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
+            log('Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
             log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
             
             // Automatically test database connections on load
@@ -1634,7 +1616,7 @@ $sessionInfo = getSessionInfo();
         function clearLogs() {
             document.getElementById('logArea').innerHTML = '';
             log('System initialized and ready for secure synchronization.', 'info');
-            log('🔐 Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
+            log('Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
             log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
         }
 
