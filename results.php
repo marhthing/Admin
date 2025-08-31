@@ -1,4 +1,3 @@
-
 <?php
 require_once 'auth.php';
 require_once 'db.php';
@@ -9,17 +8,17 @@ requireAuth();
 // Handle delete request
 if ($_POST['action'] ?? '' === 'delete_result') {
     header('Content-Type: application/json');
-    
+
     try {
         $result_id = $_POST['result_id'] ?? '';
         if (!$result_id) {
             throw new Exception('Result ID is required');
         }
-        
+
         $cbt = createConnection('cbt');
         $stmt = $cbt->prepare("DELETE FROM test_results WHERE id = ?");
         $stmt->execute([$result_id]);
-        
+
         echo json_encode(['success' => true, 'message' => 'Result deleted successfully']);
         exit;
     } catch (Exception $e) {
@@ -721,13 +720,13 @@ $sessionInfo = getSessionInfo();
             const seconds = sessionTimeRemaining % 60;
             document.getElementById('sessionTimer').textContent = 
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            
+
             if (sessionTimeRemaining <= 0) {
                 alert('Session expired. You will be redirected to login.');
                 logout();
                 return;
             }
-            
+
             sessionTimeRemaining--;
         }
 
@@ -768,7 +767,7 @@ $sessionInfo = getSessionInfo();
             try {
                 const urlParams = new URLSearchParams(window.location.search);
                 const queryString = urlParams.toString();
-                
+
                 const response = await fetch(`fetch_results.php?${queryString}`);
                 const data = await response.json();
 
@@ -795,7 +794,7 @@ $sessionInfo = getSessionInfo();
                 resultsTableBody.innerHTML = data.results.map(result => {
                     const percentage = result.total_marks > 0 ? Math.round((result.score / result.total_marks) * 100) : 0;
                     const badgeClass = getScoreBadgeClass(percentage);
-                    
+
                     return `
                         <tr>
                             <td>${result.student_name || 'N/A'}</td>

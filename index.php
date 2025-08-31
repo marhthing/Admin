@@ -8,8 +8,10 @@ if (isAuthenticated() && !isSessionExpired()) {
     header('Location: dashboard.php');
     exit;
 } else {
-    // User is not authenticated or session expired, redirect to login
-    logout(); // Clean up any invalid session data
+    // Only logout if there was an expired session, not if no session exists
+    if (isAuthenticated() && isSessionExpired()) {
+        logout(); // Clean up expired session data
+    }
     header('Location: login.php');
     exit;
 }

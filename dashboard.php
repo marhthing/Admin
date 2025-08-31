@@ -1,5 +1,6 @@
 <?php
 require_once 'auth.php';
+require_once 'db.php';
 
 // Require authentication
 requireAuth();
@@ -287,7 +288,6 @@ $sessionInfo = getSessionInfo();
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 0.75rem;
-            margin-bottom: 1rem;
         }
 
         .status-item {
@@ -737,7 +737,7 @@ $sessionInfo = getSessionInfo();
                     <div class="log-area" id="logArea">
                         <div style="color: #94a3b8;">📋 Detailed migration logs will appear here...</div>
                         <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
-                        <div style="color: #fbbf24;">🔐 Security Note: All passwords will be converted from plain text to secure hash.</div>
+                        <div style="color: #fbbf24;">🔐 Note: All passwords will be converted from plain text to secure hash.</div>
                     </div>
                 </div>
             </div>
