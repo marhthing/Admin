@@ -115,3 +115,88 @@ try {
     ]);
 }
 ?>
+<?php
+require_once 'auth.php';
+require_once 'db.php';
+
+// Require authentication
+requireAuth();
+
+header('Content-Type: application/json');
+
+try {
+    // Get filter parameters
+    $class_filter = $_GET['class'] ?? '';
+    $term_filter = $_GET['term'] ?? '';
+    $session_filter = $_GET['session'] ?? '';
+    $subject_filter = $_GET['subject'] ?? '';
+    $assignment_type_filter = $_GET['assignment_type'] ?? '';
+
+    $cbt = createConnection('cbt');
+    
+    // Build query with filters
+    $query = "SELECT 
+                tr.id,
+                tr.score,
+                tr.total_marks,
+                tr.submitted_at as date_taken,
+                u.full_name as student_name,
+                u.reg_number,
+                tc.subject_name as subject,
+                tc.assignment_type,
+                tc.class_level as class,
+                s.session_name as session,
+                t.term_name as term
+              FROM test_results tr
+              LEFT JOIN users u ON tr.student_id = u.id
+              LEFT JOIN test_codes tc ON tr.test_code_id = tc.id
+              LEFT JOIN sessions s ON tc.session_id = s.id
+              LEFT JOIN terms t ON tc.term_id = t.id
+              WHERE 1=1";
+    
+    $params = [];
+    
+    if (!empty($class_filter)) {
+        $query .= " AND tc.class_level = ?";
+        $params[] = $class_filter;
+    }
+    
+    if (!empty($term_filter)) {
+        $query .= " AND t.term_name = ?";
+        $params[] = $term_filter;
+    }
+    
+    if (!empty($session_filter)) {
+        $query .= " AND s.session_name = ?";
+        $params[] = $session_filter;
+    }
+    
+    if (!empty($subject_filter)) {
+        $query .= " AND tc.subject_name = ?";
+        $params[] = $subject_filter;
+    }
+    
+    if (!empty($assignment_type_filter)) {
+        $query .= " AND tc.assignment_type = ?";
+        $params[] = $assignment_type_filter;
+    }
+    
+    $query .= " ORDER BY tr.submitted_at DESC LIMIT 100";
+    
+    $stmt = $cbt->prepare($query);
+    $stmt->execute($params);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    echo json_encode([
+        'success' => true,
+        'results' => $results
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'results' => []
+    ]);
+}
+?>
