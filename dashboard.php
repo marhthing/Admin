@@ -943,7 +943,7 @@ $sessionInfo = getSessionInfo();
                         <h3>Data Migration</h3>
                         <p>Intelligent synchronization between SFGS and CBT systems</p>
                     </div>
-                    
+
                     <div class="security-notices">
                         <div class="security-alert">
                             <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg></span>
@@ -1153,8 +1153,7 @@ $sessionInfo = getSessionInfo();
                 warning: '#fbbf24',
                 info: '#e2e8f0',
                 security: '#fb7185'
-    
-
+            };
             logDiv.style.color = colors[type] || colors.info;
             logArea.appendChild(logDiv);
             logArea.scrollTop = logArea.scrollHeight;
@@ -1171,8 +1170,7 @@ $sessionInfo = getSessionInfo();
                 running: '⏳',
                 success: '✓',
                 error: '✗'
-    
-
+            };
             icon.textContent = icons[state] || '⏳';
         }
 
@@ -1377,7 +1375,7 @@ $sessionInfo = getSessionInfo();
             const cbtIndicator = document.getElementById('cbt-indicator');
             const sfgsStatus = document.getElementById('sfgs-status-text');
             const cbtStatus = document.getElementById('cbt-status-text');
-            
+
             // Set to checking state
             testBtn.disabled = true;
             testBtn.textContent = 'Testing...';
@@ -1385,7 +1383,7 @@ $sessionInfo = getSessionInfo();
             cbtIndicator.className = 'connection-indicator pending';
             sfgsStatus.textContent = 'Testing connection...';
             cbtStatus.textContent = 'Testing connection...';
-            
+
             try {
                 const response = await fetch('check_connections.php', {
                     method: 'POST',
@@ -1393,9 +1391,9 @@ $sessionInfo = getSessionInfo();
                         'Content-Type': 'application/json',
                     }
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
                     // Update SFGS status
                     if (result.connections.sfgs.status === 'connected') {
@@ -1407,7 +1405,7 @@ $sessionInfo = getSessionInfo();
                         sfgsStatus.textContent = 'Connection failed';
                         sfgsStatus.style.color = 'var(--error)';
                     }
-                    
+
                     // Update CBT status
                     if (result.connections.cbt.status === 'connected') {
                         cbtIndicator.className = 'connection-indicator connected';
@@ -1452,25 +1450,25 @@ $sessionInfo = getSessionInfo();
             log('System initialized and ready for secure synchronization.', 'info');
             log('Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
             log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
-            
+
             // Automatically test database connections on load
             setTimeout(() => {
                 testDatabaseConnections();
                 refreshSystemStats();
             }, 500);
-            
+
             // Auto-refresh database status every 30 seconds
             setInterval(() => {
                 testDatabaseConnections();
             }, 30000);
+        }
 
-        
         // System statistics functions
         async function refreshSystemStats() {
             const refreshBtn = document.getElementById('refreshStatsBtn');
             refreshBtn.disabled = true;
             refreshBtn.textContent = 'Loading...';
-            
+
             try {
                 const response = await fetch('get_stats.php', {
                     method: 'POST',
@@ -1478,9 +1476,9 @@ $sessionInfo = getSessionInfo();
                         'Content-Type': 'application/json',
                     }
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
                     document.getElementById('totalUsersCount').textContent = result.stats.total_users || '0';
                     document.getElementById('totalClassesCount').textContent = result.stats.total_classes || '0';
@@ -1494,7 +1492,7 @@ $sessionInfo = getSessionInfo();
                 refreshBtn.textContent = 'Refresh Stats';
             }
         }
-        
+
         function clearLogs() {
             document.getElementById('logArea').innerHTML = '';
             log('System initialized and ready for secure synchronization.', 'info');
@@ -1503,7 +1501,5 @@ $sessionInfo = getSessionInfo();
         }
 
     </script>
-        </main>
-    </div>
 </body>
 </html>
