@@ -28,15 +28,19 @@ if (isAuthenticated() && !isSessionExpired()) {
     <title>SFGS Migration System - Login</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --error-color: #dc2626;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-color: #e2e8f0;
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --primary-color: #6366f1;
+            --primary-hover: #4f46e5;
+            --error-color: #ef4444;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --background: #fafafa;
+            --surface: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #f3f4f6;
+            --border-hover: #e5e7eb;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
         }
 
         * {
@@ -46,23 +50,26 @@ if (isAuthenticated() && !isSessionExpired()) {
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 1rem;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--text-primary);
         }
 
         .login-container {
-            background: var(--surface-color);
-            border-radius: 1rem;
-            padding: 2.5rem;
-            box-shadow: var(--shadow-lg);
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
             width: 100%;
-            max-width: 400px;
-            border: 1px solid var(--border-color);
+            max-width: 380px;
+            border: 1px solid var(--border);
         }
 
         .login-header {
@@ -72,14 +79,16 @@ if (isAuthenticated() && !isSessionExpired()) {
 
         .login-header h1 {
             color: var(--text-primary);
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.025em;
         }
 
         .login-header p {
-            color: var(--text-secondary);
+            color: var(--text-muted);
             font-size: 0.875rem;
+            font-weight: 400;
         }
 
         .form-group {
@@ -96,18 +105,23 @@ if (isAuthenticated() && !isSessionExpired()) {
 
         .form-input {
             width: 100%;
-            padding: 0.875rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            transition: all 0.2s ease;
-            background: var(--background-color);
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
+            background: var(--surface);
+            color: var(--text-primary);
         }
 
         .form-input:focus {
             outline: none;
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgb(37 99 235 / 0.1);
+            box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
         }
 
         .login-btn {
@@ -115,48 +129,54 @@ if (isAuthenticated() && !isSessionExpired()) {
             background: var(--primary-color);
             color: white;
             border: none;
-            padding: 0.875rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
+            letter-spacing: -0.025em;
         }
 
         .login-btn:hover {
             background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
         }
 
         .error-message {
             background: #fef2f2;
-            border: 1px solid #fecaca;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            border: 1px solid #fed7d7;
+            border-radius: 8px;
+            padding: 0.75rem;
             margin-bottom: 1rem;
             color: var(--error-color);
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.5rem;
         }
 
         .security-notice {
-            background: #fefce8;
-            border: 1px solid #fef08a;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 0.75rem;
             margin-bottom: 1.5rem;
             color: #92400e;
-            font-size: 0.875rem;
+            font-size: 0.8125rem;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.5rem;
         }
 
         .footer-text {
             text-align: center;
             margin-top: 1.5rem;
-            color: var(--text-secondary);
+            color: var(--text-muted);
             font-size: 0.75rem;
         }
 
@@ -174,7 +194,7 @@ if (isAuthenticated() && !isSessionExpired()) {
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1>🔐 Secure Access</h1>
+            <h1>Migration System</h1>
             <p>SFGS to CBT Migration System</p>
         </div>
 
@@ -208,7 +228,7 @@ if (isAuthenticated() && !isSessionExpired()) {
             </div>
 
             <button type="submit" class="login-btn">
-                🚀 Access Migration System
+                Sign In
             </button>
         </form>
 

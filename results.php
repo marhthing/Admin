@@ -45,20 +45,22 @@ $sessionInfo = getSessionInfo();
     <title>CBT Results Management - SFGS System</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --secondary-color: #64748b;
-            --success-color: #059669;
-            --error-color: #dc2626;
-            --warning-color: #d97706;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: #64748b;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --background: #fafafa;
+            --surface: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #f3f4f6;
+            --border-hover: #e5e7eb;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
         }
 
         * {
@@ -68,22 +70,26 @@ $sessionInfo = getSessionInfo();
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
             min-height: 100vh;
+            font-size: 14px;
         }
 
         .session-bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
             padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.875rem;
-            box-shadow: var(--shadow-sm);
+            font-size: 0.8125rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+            border-radius: var(--radius);
         }
 
         .session-info {
@@ -122,7 +128,7 @@ $sessionInfo = getSessionInfo();
         /* Desktop Sidebar */
         .sidebar {
             width: 250px;
-            background: var(--surface-color);
+            background: var(--surface);
             border-right: 1px solid var(--border-color);
             box-shadow: var(--shadow-sm);
         }
@@ -178,7 +184,7 @@ $sessionInfo = getSessionInfo();
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--surface-color);
+            background: var(--surface);
             border-top: 1px solid var(--border-color);
             box-shadow: var(--shadow-lg);
             z-index: 1000;
@@ -220,7 +226,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .page-header {
-            background: var(--surface-color);
+            background: var(--surface);
             border-radius: 0.75rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
@@ -240,7 +246,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .filters-section {
-            background: var(--surface-color);
+            background: var(--surface);
             border-radius: 0.75rem;
             padding: 1.5rem;
             margin-bottom: 1.5rem;
@@ -330,7 +336,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .results-section {
-            background: var(--surface-color);
+            background: var(--surface);
             border-radius: 0.75rem;
             padding: 1.5rem;
             box-shadow: var(--shadow-sm);
@@ -424,7 +430,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .modal-content {
-            background-color: var(--surface-color);
+            background-color: var(--surface);
             margin: 15% auto;
             padding: 2rem;
             border-radius: 0.75rem;

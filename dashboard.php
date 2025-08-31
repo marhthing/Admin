@@ -16,20 +16,22 @@ $sessionInfo = getSessionInfo();
     <title>SFGS to CBT Migration System</title>
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
-            --secondary-color: #64748b;
-            --success-color: #059669;
-            --error-color: #dc2626;
-            --warning-color: #d97706;
-            --background-color: #f8fafc;
-            --surface-color: #ffffff;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --border-color: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --secondary: #64748b;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --background: #fafafa;
+            --surface: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #f3f4f6;
+            --border-hover: #e5e7eb;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
         }
 
         * {
@@ -39,34 +41,64 @@ $sessionInfo = getSessionInfo();
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--background);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
             min-height: 100vh;
-            display: flex; /* Use flexbox for layout */
+            font-size: 14px;
+            margin: 0;
         }
 
-        /* Sidebar for Desktop */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+        }
+
         .sidebar {
-            width: 250px;
-            background-color: var(--surface-color);
-            border-right: 1px solid var(--border-color);
+            width: 240px;
+            background: var(--surface);
+            border-right: 1px solid var(--border);
             padding: 1.5rem;
-            flex-shrink: 0; /* Prevent sidebar from shrinking */
-            box-shadow: var(--shadow-sm);
-            height: 100vh; /* Full height */
-            position: sticky; /* Stick to top */
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+            height: 100vh;
+            position: sticky;
             top: 0;
-            overflow-y: auto; /* Enable scrolling if content exceeds height */
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
         }
 
         .sidebar .logo {
             text-align: center;
             margin-bottom: 2rem;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: -0.025em;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar .logo {
+                margin-bottom: 1rem;
+                font-size: 1.125rem;
+            }
         }
 
         .sidebar-nav ul {
@@ -82,21 +114,22 @@ $sessionInfo = getSessionInfo();
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
+            padding: 0.625rem 0.875rem;
+            border-radius: var(--radius-sm);
             color: var(--text-secondary);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.2s ease;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
         }
 
         .sidebar-nav a:hover {
-            background: var(--background-color);
-            color: var(--primary-color);
+            background: var(--background);
+            color: var(--primary);
         }
 
         .sidebar-nav a.active {
-            background: var(--primary-color);
+            background: var(--primary);
             color: white;
         }
 
@@ -104,25 +137,34 @@ $sessionInfo = getSessionInfo();
             font-size: 1.125rem;
         }
 
-        /* Main content area */
         .main-content-wrapper {
-            flex-grow: 1; /* Allow main content to take remaining space */
-            padding: 2rem;
-            overflow-y: auto; /* Enable scrolling for content */
-            height: 100vh; /* Full height */
+            flex-grow: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            height: 100vh;
+            background: var(--background);
+        }
+
+        @media (max-width: 768px) {
+            .main-content-wrapper {
+                padding: 1rem;
+                height: auto;
+                min-height: calc(100vh - 80px);
+            }
         }
 
         .session-bar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
             padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.875rem;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 1.5rem; /* Add margin below session bar */
-            border-radius: 0.75rem; /* Match container radius */
+            font-size: 0.8125rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            border-radius: var(--radius);
         }
 
         .session-info {
@@ -132,25 +174,30 @@ $sessionInfo = getSessionInfo();
         }
 
         .session-timer {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.25rem 0.75rem;
-            border-radius: 1rem;
-            font-weight: 600;
+            background: var(--background);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.625rem;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 0.75rem;
+            border: 1px solid var(--border);
         }
 
         .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--error);
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
         }
 
         .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #dc2626;
+            transform: translateY(-1px);
         }
 
         .container {
@@ -160,50 +207,79 @@ $sessionInfo = getSessionInfo();
         }
 
         .header {
-            background: var(--surface-color);
-            border-radius: 0.75rem;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
             text-align: center;
         }
 
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+        }
+
         .header h1 {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 1.5rem;
+            font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.375rem;
+            letter-spacing: -0.025em;
         }
 
         .header p {
             color: var(--text-secondary);
-            font-size: 1.125rem;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.25rem;
+            }
         }
 
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
         }
 
         .info-section {
-            background: var(--surface-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+            .info-section {
+                padding: 1rem;
+            }
         }
 
         .info-section h3 {
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.875rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            letter-spacing: -0.025em;
         }
 
         .info-grid {
@@ -213,16 +289,18 @@ $sessionInfo = getSessionInfo();
         }
 
         .info-item {
-            background: var(--background-color);
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
+            background: var(--background);
+            padding: 0.625rem;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
         }
 
         .info-item strong {
             color: var(--text-primary);
             display: block;
             margin-bottom: 0.25rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
             font-weight: 600;
             font-size: 0.875rem;
         }
@@ -314,13 +392,13 @@ $sessionInfo = getSessionInfo();
             flex-shrink: 0;
         }
 
-        .status-pending { background: var(--secondary-color); }
+        .status-pending { background: var(--secondary); }
         .status-running { 
-            background: var(--warning-color); 
+            background: var(--warning); 
             animation: pulse 2s infinite;
         }
-        .status-success { background: var(--success-color); }
-        .status-error { background: var(--error-color); }
+        .status-success { background: var(--success); }
+        .status-error { background: var(--error); }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
@@ -339,19 +417,19 @@ $sessionInfo = getSessionInfo();
 
         .progress-bar {
             width: 100%;
-            height: 0.5rem;
-            background: var(--border-color);
-            border-radius: 0.25rem;
+            height: 0.375rem;
+            background: var(--border);
+            border-radius: 4px;
             overflow: hidden;
             margin-top: 0.5rem;
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--primary-color);
+            background: var(--primary);
             width: 0%;
             transition: width 0.3s ease;
-            border-radius: 0.25rem;
+            border-radius: 4px;
         }
 
         .progress-text {
@@ -365,16 +443,16 @@ $sessionInfo = getSessionInfo();
         }
 
         .log-area {
-            background: #1e293b;
+            background: #0f172a;
             color: #e2e8f0;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            font-size: 0.875rem;
-            height: 300px;
+            border-radius: var(--radius-sm);
+            padding: 0.875rem;
+            font-family: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.8125rem;
+            height: 280px;
             overflow-y: auto;
-            border: 1px solid var(--border-color);
-            line-height: 1.5;
+            border: 1px solid var(--border);
+            line-height: 1.4;
         }
 
         .log-area::-webkit-scrollbar {
@@ -394,8 +472,8 @@ $sessionInfo = getSessionInfo();
         .summary-box {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            border-radius: var(--radius-sm);
+            padding: 0.875rem;
             margin-top: 1rem;
             display: none;
         }
@@ -405,9 +483,10 @@ $sessionInfo = getSessionInfo();
         }
 
         .summary-box h4 {
-            color: var(--success-color);
+            color: var(--success);
             font-weight: 600;
             margin-bottom: 0.75rem;
+            font-size: 0.875rem;
         }
 
         .summary-grid {
@@ -425,18 +504,20 @@ $sessionInfo = getSessionInfo();
 
         .summary-item strong {
             display: block;
-            color: var(--success-color);
-            font-weight: 600;
+            color: var(--success);
+            font-weight: 500;
             margin-bottom: 0.25rem;
+            font-size: 0.8125rem;
         }
 
         .alert {
-            background: #fef3cd;
-            border: 1px solid #fde68a;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: var(--radius-sm);
+            padding: 0.875rem;
             margin-bottom: 1rem;
             color: #92400e;
+            font-size: 0.8125rem;
         }
 
         .alert-icon {
@@ -447,10 +528,11 @@ $sessionInfo = getSessionInfo();
         .security-alert {
             background: #fef2f2;
             border: 1px solid #fecaca;
-            border-radius: 0.5rem;
-            padding: 1rem;
+            border-radius: var(--radius-sm);
+            padding: 0.875rem;
             margin-bottom: 1rem;
-            color: var(--error-color);
+            color: var(--error);
+            font-size: 0.8125rem;
         }
 
         /* Responsive Design */
@@ -464,92 +546,42 @@ $sessionInfo = getSessionInfo();
             }
         }
 
-        /* Desktop Sidebar / Mobile Bottom Bar */
-        @media (min-width: 769px) { /* Desktop view */
-            .main-content-wrapper {
-                padding-left: calc(2rem + 250px); /* Account for sidebar width */
-            }
-        }
-
-        @media (max-width: 768px) { /* Mobile view */
-            body {
-                flex-direction: column; /* Stack elements vertically */
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto; /* Adjust height */
-                max-height: 60px; /* Fixed height for bottom bar */
-                position: fixed; /* Stick to bottom */
-                bottom: 0;
-                left: 0;
-                right: 0;
-                z-index: 1000;
-                border-top: 1px solid var(--border-color);
-                border-right: none;
-                padding: 0.5rem 1rem;
-                box-shadow: var(--shadow-md); /* Shadow for bottom bar */
-                display: flex; /* Use flex for bottom bar layout */
-                flex-direction: row;
-                justify-content: space-around;
-                align-items: center;
-            }
-
-            .sidebar .logo {
-                display: none; /* Hide logo on mobile */
-            }
-
+        /* Mobile navigation improvements */
+        @media (max-width: 768px) {
             .sidebar-nav ul {
                 display: flex;
-                width: 100%;
-                justify-content: space-around;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 0.5rem;
             }
 
             .sidebar-nav li {
-                margin-bottom: 0; /* Remove margin for bottom bar */
+                flex: 1;
+                min-width: 0;
             }
 
             .sidebar-nav a {
-                flex-direction: column; /* Stack icon and text */
-                gap: 0.25rem;
-                padding: 0.5rem 0;
-                width: 80px; /* Fixed width for buttons */
+                padding: 0.5rem;
                 text-align: center;
+                font-size: 0.8125rem;
             }
 
             .sidebar-nav a span {
-                font-size: 1.5rem; /* Larger icon for mobile */
-            }
-
-            .sidebar-nav a.active span {
-                color: var(--primary-color); /* Active indicator color */
-            }
-            .sidebar-nav a.active {
-                color: var(--primary-color);
-                background: none; /* Remove background for active state */
-            }
-
-            .main-content-wrapper {
-                padding: 1rem; /* Reduced padding for mobile */
-                padding-bottom: 70px; /* Add padding at the bottom to avoid content being hidden by bottom bar */
-                height: auto; /* Allow height to adjust */
-                overflow-y: visible; /* Disable scrolling for main content wrapper */
+                font-size: 1rem;
             }
 
             .session-bar {
                 flex-direction: column;
                 gap: 0.5rem;
                 text-align: center;
-                margin-bottom: 1rem;
+                padding: 0.625rem 0.875rem;
             }
 
-            .header {
-                padding: 1.5rem;
-                margin-bottom: 1rem;
+            .session-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
             }
-
-            .header h1 {
-                font-size: 1.5rem;
             }
 
             .main-content {
@@ -598,6 +630,7 @@ $sessionInfo = getSessionInfo();
     </style>
 </head>
 <body>
+<div class="app-container">
     <aside class="sidebar">
         <div class="logo">CBT Sync</div>
         <nav class="sidebar-nav">
@@ -1027,5 +1060,6 @@ $sessionInfo = getSessionInfo();
             log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
         };
     </script>
+</div>
 </body>
 </html>
