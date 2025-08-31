@@ -52,6 +52,21 @@ $sessionInfo = getSessionInfo();
 
 
 
+        /* Top Sections Grid Layout */
+        .top-sections-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .top-sections-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
         /* Mobile Bottom Bar */
         .bottom-bar {
             display: none;
@@ -989,61 +1004,63 @@ $sessionInfo = getSessionInfo();
             </div>
 
 
-            <!-- Database Status Section -->
-            <div class="db-status-card">
-                    <h3>Database Connection Status</h3>
-                    <div class="db-connections">
-                        <div class="db-connection" id="sfgs-status">
-                            <div class="connection-indicator pending" id="sfgs-indicator"></div>
-                            <div class="connection-info">
-                                <strong>SFGS Database</strong>
-                                <span>if0_39795047_sfgs (Source)</span>
-                                <span class="connection-status" id="sfgs-status-text">Checking...</span>
+            <!-- Top Section Grid: Database Status and Migration Controls -->
+            <div class="top-sections-grid">
+                <!-- Database Status Section -->
+                <div class="db-status-card">
+                        <h3>Database Connection Status</h3>
+                        <div class="db-connections">
+                            <div class="db-connection" id="sfgs-status">
+                                <div class="connection-indicator pending" id="sfgs-indicator"></div>
+                                <div class="connection-info">
+                                    <strong>SFGS Database</strong>
+                                    <span>if0_39795047_sfgs (Source)</span>
+                                    <span class="connection-status" id="sfgs-status-text">Checking...</span>
+                                </div>
+                            </div>
+                            <div class="db-connection" id="cbt-status">
+                                <div class="connection-indicator pending" id="cbt-indicator"></div>
+                                <div class="connection-info">
+                                    <strong>CBT Database</strong>
+                                    <span>if0_39795047_cbt (Target)</span>
+                                    <span class="connection-status" id="cbt-status-text">Checking...</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="db-connection" id="cbt-status">
-                            <div class="connection-indicator pending" id="cbt-indicator"></div>
-                            <div class="connection-info">
-                                <strong>CBT Database</strong>
-                                <span>if0_39795047_cbt (Target)</span>
-                                <span class="connection-status" id="cbt-status-text">Checking...</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="test-connections-btn" onclick="testDatabaseConnections()" id="testConnectionsBtn">
-                        Refresh Status
-                    </button>
-                </div>
-            </div>
-
-            <!-- Migration Controls Section -->
-            <div class="migration-section">
-                    <div class="migration-header">
-                        <h3>Data Migration</h3>
-                        <p>Intelligent synchronization between SFGS and CBT systems</p>
-                    </div>
-
-                    <div class="security-notices">
-                        <div class="security-alert">
-                            <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg></span>
-                            <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
-                        </div>
-                        <div class="alert">
-                            <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></span>
-                            Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
-                        </div>
-                    </div>
-
-                    <div class="migration-controls">
-                        <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
-                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.5rem;">
-                                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                            </svg>
-                            Start Smart Sync
+                        <button class="test-connections-btn" onclick="testDatabaseConnections()" id="testConnectionsBtn">
+                            Refresh Status
                         </button>
-                        <p class="migration-note">Click to begin intelligent data synchronization with detailed logging</p>
                     </div>
-                </div>
+
+                <!-- Migration Controls Section -->
+                <div class="migration-section">
+                        <div class="migration-header">
+                            <h3>Data Migration</h3>
+                            <p>Intelligent synchronization between SFGS and CBT systems</p>
+                        </div>
+
+                        <div class="security-notices">
+                            <div class="security-alert">
+                                <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg></span>
+                                <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
+                            </div>
+                            <div class="alert">
+                                <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></span>
+                                Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
+                            </div>
+                        </div>
+
+                        <div class="migration-controls">
+                            <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.5rem;">
+                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+                                </svg>
+                                Start Smart Sync
+                            </button>
+                            <p class="migration-note">Click to begin intelligent data synchronization with detailed logging</p>
+                        </div>
+                    </div>
+            </div>
 
             <div class="data-mapping-section">
                         <h3>Data Mapping Overview</h3>
