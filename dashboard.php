@@ -1,4 +1,3 @@
-
 <?php
 require_once 'auth.php';
 
@@ -44,6 +43,72 @@ $sessionInfo = getSessionInfo();
             color: var(--text-primary);
             line-height: 1.6;
             min-height: 100vh;
+            display: flex; /* Use flexbox for layout */
+        }
+
+        /* Sidebar for Desktop */
+        .sidebar {
+            width: 250px;
+            background-color: var(--surface-color);
+            border-right: 1px solid var(--border-color);
+            padding: 1.5rem;
+            flex-shrink: 0; /* Prevent sidebar from shrinking */
+            box-shadow: var(--shadow-sm);
+            height: 100vh; /* Full height */
+            position: sticky; /* Stick to top */
+            top: 0;
+            overflow-y: auto; /* Enable scrolling if content exceeds height */
+        }
+
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--background-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-nav a span {
+            font-size: 1.125rem;
+        }
+
+        /* Main content area */
+        .main-content-wrapper {
+            flex-grow: 1; /* Allow main content to take remaining space */
+            padding: 2rem;
+            overflow-y: auto; /* Enable scrolling for content */
+            height: 100vh; /* Full height */
         }
 
         .session-bar {
@@ -55,6 +120,8 @@ $sessionInfo = getSessionInfo();
             align-items: center;
             font-size: 0.875rem;
             box-shadow: var(--shadow-sm);
+            margin-bottom: 1.5rem; /* Add margin below session bar */
+            border-radius: 0.75rem; /* Match container radius */
         }
 
         .session-info {
@@ -391,21 +458,89 @@ $sessionInfo = getSessionInfo();
             .main-content {
                 grid-template-columns: 1fr;
             }
-            
+
             .status-grid {
                 grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 768px) {
-            .container {
-                padding: 0.5rem;
+        /* Desktop Sidebar / Mobile Bottom Bar */
+        @media (min-width: 769px) { /* Desktop view */
+            .main-content-wrapper {
+                padding-left: calc(2rem + 250px); /* Account for sidebar width */
+            }
+        }
+
+        @media (max-width: 768px) { /* Mobile view */
+            body {
+                flex-direction: column; /* Stack elements vertically */
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto; /* Adjust height */
+                max-height: 60px; /* Fixed height for bottom bar */
+                position: fixed; /* Stick to bottom */
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                border-top: 1px solid var(--border-color);
+                border-right: none;
+                padding: 0.5rem 1rem;
+                box-shadow: var(--shadow-md); /* Shadow for bottom bar */
+                display: flex; /* Use flex for bottom bar layout */
+                flex-direction: row;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .sidebar .logo {
+                display: none; /* Hide logo on mobile */
+            }
+
+            .sidebar-nav ul {
+                display: flex;
+                width: 100%;
+                justify-content: space-around;
+            }
+
+            .sidebar-nav li {
+                margin-bottom: 0; /* Remove margin for bottom bar */
+            }
+
+            .sidebar-nav a {
+                flex-direction: column; /* Stack icon and text */
+                gap: 0.25rem;
+                padding: 0.5rem 0;
+                width: 80px; /* Fixed width for buttons */
+                text-align: center;
+            }
+
+            .sidebar-nav a span {
+                font-size: 1.5rem; /* Larger icon for mobile */
+            }
+
+            .sidebar-nav a.active span {
+                color: var(--primary-color); /* Active indicator color */
+            }
+            .sidebar-nav a.active {
+                color: var(--primary-color);
+                background: none; /* Remove background for active state */
+            }
+
+            .main-content-wrapper {
+                padding: 1rem; /* Reduced padding for mobile */
+                padding-bottom: 70px; /* Add padding at the bottom to avoid content being hidden by bottom bar */
+                height: auto; /* Allow height to adjust */
+                overflow-y: visible; /* Disable scrolling for main content wrapper */
             }
 
             .session-bar {
                 flex-direction: column;
                 gap: 0.5rem;
                 text-align: center;
+                margin-bottom: 1rem;
             }
 
             .header {
@@ -463,137 +598,150 @@ $sessionInfo = getSessionInfo();
     </style>
 </head>
 <body>
-    <div class="session-bar">
-        <div class="session-info">
-            <span>🔐 Authenticated Session</span>
-            <span class="session-timer" id="sessionTimer">5:00</span>
-        </div>
-        <button class="logout-btn" onclick="logout()">
-            🚪 Logout
-        </button>
-    </div>
+    <aside class="sidebar">
+        <div class="logo">CBT Sync</div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li><a href="dashboard.php" class="active"><span class="icon">📊</span> <span>Dashboard</span></a></li>
+                <li><a href="results.php"><span class="icon">📈</span> <span>CBT Results</span></a></li>
+                <!-- Add other navigation links here -->
+            </ul>
+        </nav>
+    </aside>
 
-    <div class="container">
-        <div class="header">
-            <h1>Database Migration System</h1>
-            <p>SFGS → CBT Data Synchronization</p>
-        </div>
-
-        <div class="main-content">
-            <div class="info-section">
-                <h3>📋 Migration Overview</h3>
-                <div class="security-alert">
-                    <span class="alert-icon">🔐</span>
-                    <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
-                </div>
-                
-                <div class="alert">
-                    <span class="alert-icon">⚠️</span>
-                    Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
-                </div>
-                
-                <div class="info-grid">
-                    <div class="info-item">
-                        <strong>Source Database</strong>
-                        <span>if0_39795047_sfgs (Read-only)</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Target Database</strong>
-                        <span>if0_39795047_cbt (Update-only)</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Admin Users</strong>
-                        <span>sfgs.users → cbt.users (passwords hashed)</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Teachers</strong>
-                        <span>sfgs.teachers → cbt.users (passwords hashed)</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Students</strong>
-                        <span>sfgs.students → cbt.users (passwords hashed)</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Classes</strong>
-                        <span>sfgs.classes → cbt.class_levels</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Sessions</strong>
-                        <span>sfgs.sessions → cbt.sessions</span>
-                    </div>
-                    <div class="info-item">
-                        <strong>Terms</strong>
-                        <span>Standard terms → cbt.terms</span>
-                    </div>
-                </div>
+    <div class="main-content-wrapper">
+        <div class="session-bar">
+            <div class="session-info">
+                <span>🔐 Authenticated Session</span>
+                <span class="session-timer" id="sessionTimer">5:00</span>
             </div>
-
-            <div class="migration-controls">
-                <h3>🚀 Start Migration</h3>
-                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                    Click to begin intelligent data synchronization with detailed step logging
-                </p>
-                <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
-                    <span>🔄</span>
-                    Start Smart Sync
-                </button>
-            </div>
+            <button class="logout-btn" onclick="logout()">
+                🚪 Logout
+            </button>
         </div>
 
-        <div class="status-section">
-            <h3>Migration Status & Detailed Logs</h3>
-            
-            <div class="status-grid">
-                <div class="status-item" id="status-connection">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Database Connection Check</span>
+        <main class="container">
+            <div class="header">
+                <h1>Database Migration System</h1>
+                <p>SFGS → CBT Data Synchronization</p>
+            </div>
+
+            <div class="main-content">
+                <div class="info-section">
+                    <h3>📋 Migration Overview</h3>
+                    <div class="security-alert">
+                        <span class="alert-icon">🔐</span>
+                        <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
+                    </div>
+
+                    <div class="alert">
+                        <span class="alert-icon">⚠️</span>
+                        Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <strong>Source Database</strong>
+                            <span>if0_39795047_sfgs (Read-only)</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Target Database</strong>
+                            <span>if0_39795047_cbt (Update-only)</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Admin Users</strong>
+                            <span>sfgs.users → cbt.users (passwords hashed)</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Teachers</strong>
+                            <span>sfgs.teachers → cbt.users (passwords hashed)</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Students</strong>
+                            <span>sfgs.students → cbt.users (passwords hashed)</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Classes</strong>
+                            <span>sfgs.classes → cbt.class_levels</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Sessions</strong>
+                            <span>sfgs.sessions → cbt.sessions</span>
+                        </div>
+                        <div class="info-item">
+                            <strong>Terms</strong>
+                            <span>Standard terms → cbt.terms</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="status-item" id="status-admin">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Admin Migration (Password Hashing)</span>
-                </div>
-                <div class="status-item" id="status-teachers">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Teachers Migration (Password Hashing)</span>
-                </div>
-                <div class="status-item" id="status-students">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Students Migration (Password Hashing)</span>
-                </div>
-                <div class="status-item" id="status-classes">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Classes Migration</span>
-                </div>
-                <div class="status-item" id="status-sessions">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Sessions Migration</span>
-                </div>
-                <div class="status-item" id="status-terms">
-                    <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Terms Migration</span>
+
+                <div class="migration-controls">
+                    <h3>🚀 Start Migration</h3>
+                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                        Click to begin intelligent data synchronization with detailed step logging
+                    </p>
+                    <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
+                        <span>🔄</span>
+                        Start Smart Sync
+                    </button>
                 </div>
             </div>
 
-            <div class="progress-container">
-                <div class="progress-text">Progress: <span id="progressText">0%</span></div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
+            <div class="status-section">
+                <h3>Migration Status & Detailed Logs</h3>
+
+                <div class="status-grid">
+                    <div class="status-item" id="status-connection">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Database Connection Check</span>
+                    </div>
+                    <div class="status-item" id="status-admin">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Admin Migration (Password Hashing)</span>
+                    </div>
+                    <div class="status-item" id="status-teachers">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Teachers Migration (Password Hashing)</span>
+                    </div>
+                    <div class="status-item" id="status-students">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Students Migration (Password Hashing)</span>
+                    </div>
+                    <div class="status-item" id="status-classes">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Classes Migration</span>
+                    </div>
+                    <div class="status-item" id="status-sessions">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Sessions Migration</span>
+                    </div>
+                    <div class="status-item" id="status-terms">
+                        <div class="status-icon status-pending">⏳</div>
+                        <span class="status-text">Terms Migration</span>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-text">Progress: <span id="progressText">0%</span></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+
+                <div class="summary-box" id="summaryBox">
+                    <h4>📊 Migration Summary</h4>
+                    <div class="summary-grid" id="summaryContent"></div>
+                </div>
+
+                <div class="log-container">
+                    <div class="log-area" id="logArea">
+                        <div style="color: #94a3b8;">📋 Detailed migration logs will appear here...</div>
+                        <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
+                        <div style="color: #fbbf24;">🔐 Security Note: All passwords will be converted from plain text to secure hash.</div>
+                    </div>
                 </div>
             </div>
-
-            <div class="summary-box" id="summaryBox">
-                <h4>📊 Migration Summary</h4>
-                <div class="summary-grid" id="summaryContent"></div>
-            </div>
-
-            <div class="log-container">
-                <div class="log-area" id="logArea">
-                    <div style="color: #94a3b8;">📋 Detailed migration logs will appear here...</div>
-                    <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
-                    <div style="color: #fbbf24;">🔐 Security Note: All passwords will be converted from plain text to secure hash.</div>
-                </div>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script>
@@ -606,13 +754,13 @@ $sessionInfo = getSessionInfo();
             const seconds = sessionTimeRemaining % 60;
             document.getElementById('sessionTimer').textContent = 
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
-            
+
             if (sessionTimeRemaining <= 0) {
                 alert('Session expired. You will be redirected to login.');
                 logout();
                 return;
             }
-            
+
             sessionTimeRemaining--;
         }
 
