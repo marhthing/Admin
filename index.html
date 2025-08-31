@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SFGS to CBT Migration System</title>
     <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary-color: #64748b;
+            --success-color: #059669;
+            --error-color: #dc2626;
+            --warning-color: #d97706;
+            --background-color: #f8fafc;
+            --surface-color: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,183 +30,258 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
             min-height: 100vh;
-            padding: 20px;
         }
 
         .container {
-            max-width: 700px;
+            max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            padding: 1rem;
         }
 
         .header {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            color: white;
-            padding: 30px;
+            background: var(--surface-color);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
             text-align: center;
         }
 
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
         }
 
         .header p {
-            opacity: 0.9;
-            font-size: 16px;
+            color: var(--text-secondary);
+            font-size: 1.125rem;
         }
 
-        .content {
-            padding: 30px;
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
         .info-section {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #2196f3;
+            background: var(--surface-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
         }
 
         .info-section h3 {
-            color: #1976d2;
-            margin-bottom: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
         }
 
         .info-item {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #bbdefb;
+            background: var(--background-color);
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
         }
 
         .info-item strong {
-            color: #1976d2;
+            color: var(--text-primary);
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .info-item span {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
 
         .migration-controls {
+            background: var(--surface-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
             text-align: center;
-            margin: 30px 0;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
         }
 
         .migrate-btn {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            background: var(--primary-color);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 18px;
+            padding: 0.875rem 2rem;
+            font-size: 1rem;
             font-weight: 600;
-            border-radius: 50px;
+            border-radius: 0.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
         }
 
-        .migrate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        .migrate-btn:hover:not(:disabled) {
+            background: var(--primary-hover);
+            box-shadow: var(--shadow-md);
         }
 
         .migrate-btn:disabled {
-            background: #95a5a6;
+            background: var(--secondary-color);
             cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+            opacity: 0.7;
         }
 
         .status-section {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
+            background: var(--surface-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            grid-column: 1 / -1;
+        }
+
+        .status-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .status-item {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
-            padding: 12px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0.875rem;
+            background: var(--background-color);
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
         }
 
         .status-icon {
-            width: 24px;
-            height: 24px;
+            width: 2rem;
+            height: 2rem;
             border-radius: 50%;
-            margin-right: 15px;
+            margin-right: 0.875rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 600;
             color: white;
-            font-size: 12px;
+            font-size: 0.875rem;
+            flex-shrink: 0;
         }
 
-        .status-pending { background: #95a5a6; }
-        .status-running { background: #f39c12; animation: pulse 1.5s infinite; }
-        .status-success { background: #27ae60; }
-        .status-error { background: #e74c3c; }
+        .status-pending { background: var(--secondary-color); }
+        .status-running { 
+            background: var(--warning-color); 
+            animation: pulse 2s infinite;
+        }
+        .status-success { background: var(--success-color); }
+        .status-error { background: var(--error-color); }
 
         @keyframes pulse {
-            0% { opacity: 1; }
+            0%, 100% { opacity: 1; }
             50% { opacity: 0.6; }
-            100% { opacity: 1; }
         }
 
-        .log-area {
-            background: #2c3e50;
-            color: #ecf0f1;
-            border-radius: 8px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            height: 250px;
-            overflow-y: auto;
-            margin-top: 15px;
-            border: 2px solid #34495e;
+        .status-text {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+
+        .progress-container {
+            margin: 1rem 0;
         }
 
         .progress-bar {
             width: 100%;
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 6px;
+            height: 0.5rem;
+            background: var(--border-color);
+            border-radius: 0.25rem;
             overflow: hidden;
-            margin: 15px 0;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 0.5rem;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #3498db, #2980b9);
+            background: var(--primary-color);
             width: 0%;
-            transition: width 0.5s ease;
-            border-radius: 6px;
+            transition: width 0.3s ease;
+            border-radius: 0.25rem;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .log-container {
+            margin-top: 1rem;
+        }
+
+        .log-area {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.875rem;
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            line-height: 1.5;
+        }
+
+        .log-area::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .log-area::-webkit-scrollbar-track {
+            background: #334155;
+            border-radius: 3px;
+        }
+
+        .log-area::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 3px;
         }
 
         .summary-box {
-            background: #d4edda;
-            border: 1px solid #c3e6cb;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
             display: none;
         }
 
@@ -196,17 +289,112 @@
             display: block;
         }
 
+        .summary-box h4 {
+            color: var(--success-color);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .summary-item {
+            background: white;
+            padding: 0.75rem;
+            border-radius: 0.375rem;
+            border: 1px solid #bbf7d0;
+        }
+
+        .summary-item strong {
+            display: block;
+            color: var(--success-color);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .alert {
+            background: #fef3cd;
+            border: 1px solid #fde68a;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #92400e;
+        }
+
+        .alert-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         @media (max-width: 768px) {
-            .info-grid {
+            .container {
+                padding: 0.5rem;
+            }
+
+            .header {
+                padding: 1.5rem;
+                margin-bottom: 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .main-content {
+                gap: 1rem;
+                margin-bottom: 1rem;
+            }
+
+            .info-section,
+            .migration-controls,
+            .status-section {
+                padding: 1rem;
+            }
+
+            .summary-grid {
                 grid-template-columns: 1fr;
             }
 
-            .container {
-                margin: 10px;
+            .log-area {
+                height: 250px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.25rem;
             }
 
-            .content {
-                padding: 20px;
+            .migrate-btn {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.875rem;
+            }
+
+            .info-item,
+            .status-item {
+                padding: 0.75rem;
+            }
+
+            .status-icon {
+                width: 1.5rem;
+                height: 1.5rem;
+                margin-right: 0.75rem;
+                font-size: 0.75rem;
             }
         }
     </style>
@@ -214,92 +402,116 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔄 Database Migration System</h1>
-            <p>SFGS → CBT User Data Transfer</p>
+            <h1>Database Migration System</h1>
+            <p>SFGS → CBT Data Synchronization</p>
         </div>
 
-        <div class="content">
+        <div class="main-content">
             <div class="info-section">
                 <h3>📋 Migration Overview</h3>
-                <p>This system will migrate user data from your SFGS database to the CBT system. Database configurations are pre-configured in the code.</p>
-
+                <div class="alert">
+                    <span class="alert-icon">⚠️</span>
+                    Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
+                </div>
+                
                 <div class="info-grid">
                     <div class="info-item">
-                        <strong>Source Database:</strong>
-                        if0_39795047_sfgs
+                        <strong>Source Database</strong>
+                        <span>if0_39795047_sfgs (Read-only)</span>
                     </div>
                     <div class="info-item">
-                        <strong>Target Database:</strong>
-                        if0_39795047_cbt
+                        <strong>Target Database</strong>
+                        <span>if0_39795047_cbt (Update-only)</span>
                     </div>
                     <div class="info-item">
-                        <strong>Admin Users:</strong>
-                        sfgs.users → cbt.users
+                        <strong>Admin Users</strong>
+                        <span>sfgs.users → cbt.users</span>
                     </div>
                     <div class="info-item">
-                        <strong>Teachers:</strong>
-                        sfgs.teachers → cbt.users
+                        <strong>Teachers</strong>
+                        <span>sfgs.teachers → cbt.users</span>
                     </div>
                     <div class="info-item">
-                        <strong>Students:</strong>
-                        sfgs.students → cbt.users
+                        <strong>Students</strong>
+                        <span>sfgs.students → cbt.users</span>
                     </div>
                     <div class="info-item">
-                        <strong>Data Mapping:</strong>
-                        Auto role assignment
+                        <strong>Classes</strong>
+                        <span>sfgs.classes → cbt.class_levels</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Sessions</strong>
+                        <span>sfgs.sessions → cbt.sessions</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Terms</strong>
+                        <span>Standard terms → cbt.terms</span>
                     </div>
                 </div>
             </div>
 
             <div class="migration-controls">
+                <h3>🚀 Start Migration</h3>
+                <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+                    Click to begin intelligent data synchronization
+                </p>
                 <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
-                    🚀 Start Migration
+                    <span>🔄</span>
+                    Start Smart Sync
                 </button>
             </div>
+        </div>
 
-            <div class="status-section">
-                <h3>Migration Status</h3>
+        <div class="status-section">
+            <h3>Migration Status</h3>
+            
+            <div class="status-grid">
                 <div class="status-item" id="status-connection">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Database Connection Check</span>
+                    <span class="status-text">Database Connection Check</span>
                 </div>
                 <div class="status-item" id="status-admin">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Admin Migration (users → cbt.users)</span>
+                    <span class="status-text">Admin Migration</span>
                 </div>
                 <div class="status-item" id="status-teachers">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Teachers Migration (teachers → cbt.users)</span>
+                    <span class="status-text">Teachers Migration</span>
                 </div>
                 <div class="status-item" id="status-students">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Students Migration (students → cbt.users)</span>
+                    <span class="status-text">Students Migration</span>
                 </div>
                 <div class="status-item" id="status-classes">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Classes Migration (classes → cbt.class_levels)</span>
+                    <span class="status-text">Classes Migration</span>
                 </div>
                 <div class="status-item" id="status-sessions">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Sessions Migration (sessions → cbt.sessions)</span>
+                    <span class="status-text">Sessions Migration</span>
                 </div>
                 <div class="status-item" id="status-terms">
                     <div class="status-icon status-pending">⏳</div>
-                    <span>Terms Migration (terms → cbt.terms)</span>
+                    <span class="status-text">Terms Migration</span>
                 </div>
+            </div>
 
+            <div class="progress-container">
+                <div class="progress-text">Progress: <span id="progressText">0%</span></div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
+            </div>
 
-                <div class="summary-box" id="summaryBox">
-                    <h4>📊 Migration Summary</h4>
-                    <div id="summaryContent"></div>
-                </div>
+            <div class="summary-box" id="summaryBox">
+                <h4>📊 Migration Summary</h4>
+                <div class="summary-grid" id="summaryContent"></div>
+            </div>
 
+            <div class="log-container">
                 <div class="log-area" id="logArea">
-                    <div>📋 Migration logs will appear here...</div>
-                    <div>Click "Start Migration" to begin the process.</div>
+                    <div style="color: #94a3b8;">📋 Migration logs will appear here...</div>
+                    <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the process.</div>
                 </div>
             </div>
         </div>
@@ -314,10 +526,14 @@
             const logDiv = document.createElement('div');
             logDiv.textContent = logMessage;
 
-            if (type === 'error') logDiv.style.color = '#e74c3c';
-            if (type === 'success') logDiv.style.color = '#27ae60';
-            if (type === 'warning') logDiv.style.color = '#f39c12';
+            const colors = {
+                error: '#f87171',
+                success: '#4ade80',
+                warning: '#fbbf24',
+                info: '#e2e8f0'
+            };
 
+            logDiv.style.color = colors[type] || colors.info;
             logArea.appendChild(logDiv);
             logArea.scrollTop = logArea.scrollHeight;
         }
@@ -328,27 +544,21 @@
 
             icon.className = `status-icon status-${state}`;
 
-            switch(state) {
-                case 'pending':
-                    icon.textContent = '⏳';
-                    break;
-                case 'running':
-                    icon.textContent = '⏳';
-                    break;
-                case 'success':
-                    icon.textContent = '✓';
-                    break;
-                case 'error':
-                    icon.textContent = '✗';
-                    break;
-                default:
-                    icon.textContent = '⏳';
-            }
+            const icons = {
+                pending: '⏳',
+                running: '⏳',
+                success: '✓',
+                error: '✗'
+            };
+
+            icon.textContent = icons[state] || '⏳';
         }
 
         function updateProgress(percentage) {
             const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
             progressFill.style.width = percentage + '%';
+            progressText.textContent = Math.round(percentage) + '%';
         }
 
         function showMigrationSummary(data) {
@@ -356,13 +566,38 @@
             const summaryContent = document.getElementById('summaryContent');
 
             summaryContent.innerHTML = `
-                <p><strong>Total Users Migrated:</strong> ${data.total || 0}</p>
-                <p><strong>Admins:</strong> ${data.admins || 0}</p>
-                <p><strong>Teachers:</strong> ${data.teachers || 0}</p>
-                <p><strong>Students:</strong> ${data.students || 0}</p>
-                <p><strong>Classes Migrated:</strong> ${data.classes || 0}</p>
-                <p><strong>Sessions Migrated:</strong> ${data.sessions || 0}</p>
-                <p><strong>Terms Migrated:</strong> ${data.terms || 0}</p>
+                <div class="summary-item">
+                    <strong>Total Users</strong>
+                    ${data.total || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Admins</strong>
+                    ${data.admins || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Teachers</strong>
+                    ${data.teachers || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Students</strong>
+                    ${data.students || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Classes</strong>
+                    ${data.classes || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Sessions</strong>
+                    ${data.sessions || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Terms</strong>
+                    ${data.terms || 0}
+                </div>
+                <div class="summary-item">
+                    <strong>Duration</strong>
+                    ${data.duration || '0'}s
+                </div>
             `;
 
             summaryBox.classList.add('show');
@@ -396,7 +631,7 @@
 
             // Reset UI
             migrateBtn.disabled = true;
-            migrateBtn.textContent = '⏳ Migrating...';
+            migrateBtn.innerHTML = '<span>⏳</span> Syncing...';
             document.getElementById('logArea').innerHTML = '';
             document.getElementById('summaryBox').classList.remove('show');
             updateProgress(0);
@@ -406,7 +641,7 @@
                 updateStatus(id, 'pending');
             });
 
-            log('🚀 Starting migration process...', 'info');
+            log('🚀 Starting smart synchronization process...', 'info');
 
             try {
                 // Step 1: Test database connections
@@ -415,79 +650,76 @@
                 const connectionResult = await callMigrationAPI('test_connection');
                 log('✓ Database connections successful', 'success');
                 updateStatus('connection', 'success');
-                updateProgress(5);
+                updateProgress(10);
 
                 // Step 2: Migrate admins
-                log('Migrating admin users...', 'info');
+                log('Synchronizing admin users...', 'info');
                 updateStatus('admin', 'running');
                 const adminResult = await callMigrationAPI('migrate_admins');
-                log(`✓ Migrated ${adminResult.count} admin users`, 'success');
+                log(`✓ ${adminResult.message}`, 'success');
                 updateStatus('admin', 'success');
-                updateProgress(15);
+                updateProgress(20);
 
                 // Step 3: Migrate teachers
-                log('Migrating teacher users...', 'info');
+                log('Synchronizing teacher users...', 'info');
                 updateStatus('teachers', 'running');
                 const teacherResult = await callMigrationAPI('migrate_teachers');
-                log(`✓ Migrated ${teacherResult.count} teacher users`, 'success');
+                log(`✓ ${teacherResult.message}`, 'success');
                 updateStatus('teachers', 'success');
-                updateProgress(25);
-
-                // Step 4: Migrate students
-                log('Migrating student users...', 'info');
-                updateStatus('students', 'running');
-                const studentResult = await callMigrationAPI('migrate_students');
-                log(`✓ Migrated ${studentResult.count} student users`, 'success');
-                updateStatus('students', 'success');
                 updateProgress(35);
 
-                // Step 5: Migrate classes
-                log('Migrating classes...', 'info');
-                updateStatus('classes', 'running');
-                const classResult = await callMigrationAPI('migrate_classes');
-                log(`✓ Migrated ${classResult.count} classes`, 'success');
-                updateStatus('classes', 'success');
+                // Step 4: Migrate students
+                log('Synchronizing student users...', 'info');
+                updateStatus('students', 'running');
+                const studentResult = await callMigrationAPI('migrate_students');
+                log(`✓ ${studentResult.message}`, 'success');
+                updateStatus('students', 'success');
                 updateProgress(50);
 
+                // Step 5: Migrate classes
+                log('Synchronizing classes...', 'info');
+                updateStatus('classes', 'running');
+                const classResult = await callMigrationAPI('migrate_classes');
+                log(`✓ ${classResult.message}`, 'success');
+                updateStatus('classes', 'success');
+                updateProgress(65);
+
                 // Step 6: Migrate sessions
-                log('Migrating sessions...', 'info');
+                log('Synchronizing sessions...', 'info');
                 updateStatus('sessions', 'running');
                 const sessionResult = await callMigrationAPI('migrate_sessions');
-                log(`✓ Migrated ${sessionResult.count} sessions`, 'success');
+                log(`✓ ${sessionResult.message}`, 'success');
                 updateStatus('sessions', 'success');
-                updateProgress(70);
+                updateProgress(80);
 
                 // Step 7: Migrate terms
-                log('Migrating terms...', 'info');
+                log('Synchronizing terms...', 'info');
                 updateStatus('terms', 'running');
                 const termResult = await callMigrationAPI('migrate_terms');
-                log(`✓ Migrated ${termResult.count} terms`, 'success');
+                log(`✓ ${termResult.message}`, 'success');
                 updateStatus('terms', 'success');
-                updateProgress(90);
+                updateProgress(95);
 
                 // Show completion summary
                 const duration = Math.round((Date.now() - startTime) / 1000);
                 const totalUsers = (adminResult.count || 0) + (teacherResult.count || 0) + (studentResult.count || 0);
-                const totalClasses = classResult.count || 0;
-                const totalSessions = sessionResult.count || 0;
-                const totalTerms = termResult.count || 0;
 
-
-                log('🎉 Migration completed successfully!', 'success');
-                log(`📊 Summary: ${totalUsers} users, ${totalClasses} classes, ${totalSessions} sessions, ${totalTerms} terms migrated in ${duration}s`, 'success');
+                log('🎉 Smart synchronization completed successfully!', 'success');
+                updateProgress(100);
 
                 showMigrationSummary({
                     total: totalUsers,
                     admins: adminResult.count,
                     teachers: teacherResult.count,
                     students: studentResult.count,
-                    classes: totalClasses,
-                    sessions: totalSessions,
-                    terms: totalTerms
+                    classes: classResult.count,
+                    sessions: sessionResult.count,
+                    terms: termResult.count,
+                    duration: duration
                 });
 
             } catch (error) {
-                log(`❌ Migration failed: ${error.message}`, 'error');
+                log(`❌ Synchronization failed: ${error.message}`, 'error');
 
                 // Mark any running status as error
                 ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms'].forEach(id => {
@@ -499,15 +731,14 @@
                 });
             } finally {
                 migrateBtn.disabled = false;
-                migrateBtn.textContent = '🚀 Start Migration';
-                updateProgress(100); // Ensure progress bar is full on completion or error
+                migrateBtn.innerHTML = '<span>🔄</span> Start Smart Sync';
             }
         }
 
         // Initialize
         window.onload = function() {
-            log('System initialized and ready for migration.', 'info');
-            log('Database configurations are set in migrate.php', 'info');
+            log('System initialized and ready for smart synchronization.', 'info');
+            log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
         };
     </script>
 </body>
