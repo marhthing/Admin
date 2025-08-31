@@ -9,15 +9,15 @@ $db_config = [
     'sfgs' => [
         'host' => 'sql100.byetcluster.com',
         'database' => 'if0_39795047_sfgs',
-        'username' => 'your_username_here',  // Replace with your actual username
-        'password' => 'your_password_here',  // Replace with your actual password
+        'username' => 'if0_39795047',  // Updated username based on database name
+        'password' => 'your_actual_password_here',  // Replace with your actual password
         'charset' => 'utf8mb4'
     ],
     'cbt' => [
         'host' => 'sql100.byetcluster.com',
         'database' => 'if0_39795047_cbt',
-        'username' => 'your_username_here',  // Replace with your actual username
-        'password' => 'your_password_here',  // Replace with your actual password
+        'username' => 'if0_39795047',  // Updated username based on database name
+        'password' => 'your_actual_password_here',  // Replace with your actual password
         'charset' => 'utf8mb4'
     ]
 ];
@@ -27,13 +27,13 @@ $db_config = [
  */
 function createConnection($db_name) {
     global $db_config;
-    
+
     if (!isset($db_config[$db_name])) {
         throw new Exception("Database configuration not found for: $db_name");
     }
-    
+
     $config = $db_config[$db_name];
-    
+
     try {
         $dsn = "mysql:host={$config['host']};dbname={$config['database']};charset={$config['charset']}";
         $pdo = new PDO($dsn, $config['username'], $config['password'], [
@@ -41,7 +41,7 @@ function createConnection($db_name) {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
         ]);
-        
+
         return $pdo;
     } catch (PDOException $e) {
         throw new Exception("Database connection failed for $db_name: " . $e->getMessage());
@@ -53,7 +53,7 @@ function createConnection($db_name) {
  */
 function testConnections() {
     $results = [];
-    
+
     foreach (['sfgs', 'cbt'] as $db_name) {
         try {
             $pdo = createConnection($db_name);
@@ -64,7 +64,7 @@ function testConnections() {
             $results[$db_name . '_error'] = $e->getMessage();
         }
     }
-    
+
     return $results;
 }
 
