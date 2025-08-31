@@ -484,40 +484,18 @@ $sessionInfo = getSessionInfo();
 
         /* Responsive Design */
         @media (max-width: 768px) {
+            .app-layout {
+                flex-direction: column;
+            }
+
             .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-                padding: 1rem;
+                display: none;
             }
 
-            .sidebar .logo {
-                margin-bottom: 1rem;
-                font-size: 1.125rem;
-            }
-
-            .sidebar-nav ul {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                gap: 0.5rem;
-            }
-
-            .sidebar-nav li {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .sidebar-nav a {
-                padding: 0.5rem;
-                text-align: center;
-                font-size: 0.8125rem;
-            }
-
-            .sidebar-nav a span {
-                font-size: 1rem;
+            .session-bar {
+                margin-bottom: 0.5rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.75rem;
             }
 
             .bottom-bar {
