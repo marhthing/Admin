@@ -4,7 +4,7 @@
  * Handles login, session management, and auto-logout functionality
  */
 
-//session_start();
+session_start();
 
 // Master password
 define('MASTER_PASSWORD', 'SUREFOUNDATIONGROUPOFSCHOOL2025');

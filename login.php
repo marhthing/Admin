@@ -193,7 +193,7 @@ if (isAuthenticated() && !isSessionExpired()) {
         </div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="login.php">
             <div class="form-group">
                 <label for="password" class="form-label">Master Password</label>
                 <input 
