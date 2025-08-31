@@ -249,11 +249,312 @@ $sessionInfo = getSessionInfo();
             margin-bottom: 1.5rem;
         }
 
+        /* Database Status Styles */
+        .status-overview {
+            margin-bottom: 1.5rem;
+        }
+
+        .db-status-card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .db-status-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .db-connections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .db-connection {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.875rem;
+            background: var(--background);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .connection-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .connection-indicator.pending {
+            background: var(--secondary);
+            animation: pulse 2s infinite;
+        }
+
+        .connection-indicator.connected {
+            background: var(--success);
+        }
+
+        .connection-indicator.error {
+            background: var(--error);
+        }
+
+        .connection-info {
+            flex: 1;
+        }
+
+        .connection-info strong {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .connection-info span {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+        }
+
+        .connection-status {
+            font-weight: 500 !important;
+        }
+
+        .test-connections-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .test-connections-btn:hover {
+            background: #475569;
+            transform: translateY(-1px);
+        }
+
+        /* Migration Section Styles */
+        .migration-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .migration-header {
+            margin-bottom: 1rem;
+        }
+
+        .migration-header h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.025em;
+        }
+
+        .migration-header p {
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+        }
+
+        .security-notices {
+            margin-bottom: 1.5rem;
+        }
+
+        .migration-note {
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Data Mapping Styles */
+        .data-mapping-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .data-mapping-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .mapping-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .mapping-item {
+            display: grid;
+            grid-template-columns: 2fr auto 2fr 1.5fr;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem;
+            background: var(--background);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .mapping-source, .mapping-target {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .mapping-arrow {
+            color: var(--primary);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .mapping-note {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        /* Dashboard Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* System Stats Section */
+        .system-stats-section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .system-stats-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--background);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .system-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+        }
+
+        .action-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: var(--secondary);
+        }
+
+        .action-btn.secondary:hover {
+            background: #475569;
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 1rem;
                 margin-bottom: 1rem;
+            }
+
+            .db-connections {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .mapping-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .mapping-arrow {
+                transform: rotate(90deg);
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 0.5rem;
+            }
+
+            .system-actions {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
 
@@ -659,64 +960,134 @@ $sessionInfo = getSessionInfo();
                 <p>SFGS → CBT Data Synchronization</p>
             </div>
 
+            <!-- Database Status Section -->
+            <div class="status-overview">
+                <div class="db-status-card">
+                    <h3>Database Connection Status</h3>
+                    <div class="db-connections">
+                        <div class="db-connection" id="sfgs-status">
+                            <div class="connection-indicator pending" id="sfgs-indicator"></div>
+                            <div class="connection-info">
+                                <strong>SFGS Database</strong>
+                                <span>if0_39795047_sfgs (Source)</span>
+                                <span class="connection-status" id="sfgs-status-text">Checking...</span>
+                            </div>
+                        </div>
+                        <div class="db-connection" id="cbt-status">
+                            <div class="connection-indicator pending" id="cbt-indicator"></div>
+                            <div class="connection-info">
+                                <strong>CBT Database</strong>
+                                <span>if0_39795047_cbt (Target)</span>
+                                <span class="connection-status" id="cbt-status-text">Checking...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="test-connections-btn" onclick="testDatabaseConnections()" id="testConnectionsBtn">
+                        Refresh Status
+                    </button>
+                </div>
+            </div>
+
+            <!-- Migration Controls Section -->
             <div class="main-content">
-                <div class="info-section">
-                    <h3>📋 Migration Overview</h3>
-                    <div class="security-alert">
-                        <span class="alert-icon">🔐</span>
-                        <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
+                <div class="migration-section">
+                    <div class="migration-header">
+                        <h3>Data Migration</h3>
+                        <p>Intelligent synchronization between SFGS and CBT systems</p>
+                    </div>
+                    
+                    <div class="security-notices">
+                        <div class="security-alert">
+                            <span class="alert-icon">🔐</span>
+                            <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
+                        </div>
+                        <div class="alert">
+                            <span class="alert-icon">⚠️</span>
+                            Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
+                        </div>
                     </div>
 
-                    <div class="alert">
-                        <span class="alert-icon">⚠️</span>
-                        Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
-                    </div>
-
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <strong>Source Database</strong>
-                            <span>if0_39795047_sfgs (Read-only)</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Target Database</strong>
-                            <span>if0_39795047_cbt (Update-only)</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Admin Users</strong>
-                            <span>sfgs.users → cbt.users (passwords hashed)</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Teachers</strong>
-                            <span>sfgs.teachers → cbt.users (passwords hashed)</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Students</strong>
-                            <span>sfgs.students → cbt.users (passwords hashed)</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Classes</strong>
-                            <span>sfgs.classes → cbt.class_levels</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Sessions</strong>
-                            <span>sfgs.sessions → cbt.sessions</span>
-                        </div>
-                        <div class="info-item">
-                            <strong>Terms</strong>
-                            <span>Standard terms → cbt.terms</span>
-                        </div>
+                    <div class="migration-controls">
+                        <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
+                            <span>🚀</span>
+                            Start Smart Sync
+                        </button>
+                        <p class="migration-note">Click to begin intelligent data synchronization with detailed logging</p>
                     </div>
                 </div>
 
-                <div class="migration-controls">
-                    <h3>🚀 Start Migration</h3>
-                    <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                        Click to begin intelligent data synchronization with detailed step logging
-                    </p>
-                    <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
-                        <span>🔄</span>
-                        Start Smart Sync
-                    </button>
+                <div class="dashboard-grid">
+                    <div class="data-mapping-section">
+                        <h3>Data Mapping Overview</h3>
+                        <div class="mapping-grid">
+                            <div class="mapping-item">
+                                <div class="mapping-source">sfgs.users</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.users</div>
+                                <div class="mapping-note">Admin accounts</div>
+                            </div>
+                            <div class="mapping-item">
+                                <div class="mapping-source">sfgs.teachers</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.users</div>
+                                <div class="mapping-note">Teacher accounts</div>
+                            </div>
+                            <div class="mapping-item">
+                                <div class="mapping-source">sfgs.students</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.users</div>
+                                <div class="mapping-note">Student accounts</div>
+                            </div>
+                            <div class="mapping-item">
+                                <div class="mapping-source">sfgs.classes</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.class_levels</div>
+                                <div class="mapping-note">Class structure</div>
+                            </div>
+                            <div class="mapping-item">
+                                <div class="mapping-source">sfgs.sessions</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.sessions</div>
+                                <div class="mapping-note">Academic sessions</div>
+                            </div>
+                            <div class="mapping-item">
+                                <div class="mapping-source">Standard terms</div>
+                                <div class="mapping-arrow">→</div>
+                                <div class="mapping-target">cbt.terms</div>
+                                <div class="mapping-note">Term structure</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="system-stats-section">
+                        <h3>System Statistics</h3>
+                        <div class="stats-grid" id="systemStats">
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalUsersCount">-</div>
+                                <div class="stat-label">Total Users</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalClassesCount">-</div>
+                                <div class="stat-label">Classes</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="totalSessionsCount">-</div>
+                                <div class="stat-label">Sessions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number" id="lastSyncTime">Never</div>
+                                <div class="stat-label">Last Sync</div>
+                            </div>
+                        </div>
+                        <div class="system-actions">
+                            <button class="action-btn" onclick="refreshSystemStats()" id="refreshStatsBtn">
+                                Refresh Stats
+                            </button>
+                            <button class="action-btn secondary" onclick="clearLogs()">
+                                Clear Logs
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -835,7 +1206,7 @@ $sessionInfo = getSessionInfo();
                 warning: '#fbbf24',
                 info: '#e2e8f0',
                 security: '#fb7185'
-            };
+    
 
             logDiv.style.color = colors[type] || colors.info;
             logArea.appendChild(logDiv);
@@ -853,7 +1224,7 @@ $sessionInfo = getSessionInfo();
                 running: '⏳',
                 success: '✓',
                 error: '✗'
-            };
+    
 
             icon.textContent = icons[state] || '⏳';
         }
@@ -1052,13 +1423,133 @@ $sessionInfo = getSessionInfo();
             }
         }
 
+        // Database connection testing
+        async function testDatabaseConnections() {
+            const testBtn = document.getElementById('testConnectionsBtn');
+            const sfgsIndicator = document.getElementById('sfgs-indicator');
+            const cbtIndicator = document.getElementById('cbt-indicator');
+            const sfgsStatus = document.getElementById('sfgs-status-text');
+            const cbtStatus = document.getElementById('cbt-status-text');
+            
+            // Set to checking state
+            testBtn.disabled = true;
+            testBtn.textContent = 'Testing...';
+            sfgsIndicator.className = 'connection-indicator pending';
+            cbtIndicator.className = 'connection-indicator pending';
+            sfgsStatus.textContent = 'Testing connection...';
+            cbtStatus.textContent = 'Testing connection...';
+            
+            try {
+                const response = await fetch('check_connections.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Update SFGS status
+                    if (result.connections.sfgs.status === 'connected') {
+                        sfgsIndicator.className = 'connection-indicator connected';
+                        sfgsStatus.textContent = 'Connected';
+                        sfgsStatus.style.color = 'var(--success)';
+                    } else {
+                        sfgsIndicator.className = 'connection-indicator error';
+                        sfgsStatus.textContent = 'Connection failed';
+                        sfgsStatus.style.color = 'var(--error)';
+                    }
+                    
+                    // Update CBT status
+                    if (result.connections.cbt.status === 'connected') {
+                        cbtIndicator.className = 'connection-indicator connected';
+                        cbtStatus.textContent = 'Connected';
+                        cbtStatus.style.color = 'var(--success)';
+                    } else {
+                        cbtIndicator.className = 'connection-indicator error';
+                        cbtStatus.textContent = 'Connection failed';
+                        cbtStatus.style.color = 'var(--error)';
+                    }
+                } else {
+                    // Both failed
+                    sfgsIndicator.className = 'connection-indicator error';
+                    cbtIndicator.className = 'connection-indicator error';
+                    sfgsStatus.textContent = 'Test failed';
+                    cbtStatus.textContent = 'Test failed';
+                    sfgsStatus.style.color = 'var(--error)';
+                    cbtStatus.style.color = 'var(--error)';
+                }
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                sfgsIndicator.className = 'connection-indicator error';
+                cbtIndicator.className = 'connection-indicator error';
+                sfgsStatus.textContent = 'Test failed';
+                cbtStatus.textContent = 'Test failed';
+                sfgsStatus.style.color = 'var(--error)';
+                cbtStatus.style.color = 'var(--error)';
+            } finally {
+                testBtn.disabled = false;
+                testBtn.textContent = 'Refresh Status';
+            }
+        }
+
         // Initialize
         window.onload = function() {
             startSessionTimer();
             log('System initialized and ready for secure synchronization.', 'info');
             log('🔐 Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
             log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
-        };
+            
+            // Automatically test database connections on load
+            setTimeout(() => {
+                testDatabaseConnections();
+                refreshSystemStats();
+            }, 500);
+            
+            // Auto-refresh database status every 30 seconds
+            setInterval(() => {
+                testDatabaseConnections();
+            }, 30000);
+
+        
+        // System statistics functions
+        async function refreshSystemStats() {
+            const refreshBtn = document.getElementById('refreshStatsBtn');
+            refreshBtn.disabled = true;
+            refreshBtn.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('get_stats.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('totalUsersCount').textContent = result.stats.total_users || '0';
+                    document.getElementById('totalClassesCount').textContent = result.stats.total_classes || '0';
+                    document.getElementById('totalSessionsCount').textContent = result.stats.total_sessions || '0';
+                    document.getElementById('lastSyncTime').textContent = result.stats.last_sync || 'Never';
+                }
+            } catch (error) {
+                console.error('Failed to fetch stats:', error);
+            } finally {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = 'Refresh Stats';
+            }
+        }
+        
+        function clearLogs() {
+            document.getElementById('logArea').innerHTML = '';
+            log('System initialized and ready for secure synchronization.', 'info');
+            log('🔐 Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
+            log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
+        }
+
     </script>
 </div>
 </body>
