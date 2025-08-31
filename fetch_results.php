@@ -44,7 +44,7 @@ try {
 
     if (!empty($assignment_type_filter)) {
         $whereConditions[] = "tc.test_type = ?";
-        $params[] = $assignment_type_filter;
+        $params[] = strtolower($assignment_type_filter); // Convert to lowercase to match database
     }
 
     $whereClause = '';
@@ -68,8 +68,8 @@ try {
             tr.submitted_at as date_taken,
             u.full_name as user_full_name
         FROM test_results tr
-        LEFT JOIN test_codes tc ON tr.test_code_id = tc.id
-        LEFT JOIN users u ON tr.student_id = u.id
+        INNER JOIN test_codes tc ON tr.test_code_id = tc.id
+        INNER JOIN users u ON tr.student_id = u.id
         LEFT JOIN subjects sub ON tc.subject_id = sub.id
         LEFT JOIN terms t ON tc.term_id = t.id
         LEFT JOIN sessions s ON tc.session_id = s.id
@@ -81,16 +81,24 @@ try {
     $stmt->execute($params);
     $results = $stmt->fetchAll();
 
-    // Process results to ensure we have proper student names
+    // Process results to ensure we have proper student names and format data
     foreach ($results as &$result) {
         if (empty($result['student_name']) && !empty($result['user_full_name'])) {
             $result['student_name'] = $result['user_full_name'];
         }
         
-        // Convert assignment type to more readable format
-        if ($result['assignment_type'] === 'test') {
-            $result['assignment_type'] = 'Test';
-        }
+        // Convert assignment type to proper case for display
+        $result['assignment_type'] = ucfirst($result['assignment_type']);
+        
+        // Ensure we have default values for null fields
+        $result['reg_number'] = $result['reg_number'] ?? 'N/A';
+        $result['student_name'] = $result['student_name'] ?? 'Unknown Student';
+        $result['class'] = $result['class'] ?? 'N/A';
+        $result['subject'] = $result['subject'] ?? 'Unknown Subject';
+        $result['term'] = $result['term'] ?? 'N/A';
+        $result['session'] = $result['session'] ?? 'N/A';
+        $result['score'] = $result['score'] ?? 0;
+        $result['total_marks'] = $result['total_marks'] ?? 0;
     }
 
     echo json_encode([
