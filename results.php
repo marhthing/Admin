@@ -599,7 +599,7 @@ $sessionInfo = getSessionInfo();
                     <li><a href="results.php" class="active"><span class="icon">📈</span> <span>CBT Results</span></a></li>
                 </ul>
             </nav>
-        </aside></nav>
+        </aside>
 
         <!-- Mobile Bottom Bar -->
         <nav class="bottom-bar">
