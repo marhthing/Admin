@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     
     if (authenticate($password)) {
-        header('Location: index.php');
+        header('Location: dashboard.php');
         exit;
     } else {
         $error = 'Invalid password. Please try again.';
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // If already authenticated, redirect to main page
 if (isAuthenticated() && !isSessionExpired()) {
-    header('Location: index.php');
+    header('Location: dashboard.php');
     exit;
 }
 ?>
