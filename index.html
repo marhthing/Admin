@@ -200,11 +200,11 @@
             .info-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .container {
                 margin: 10px;
             }
-            
+
             .content {
                 padding: 20px;
             }
@@ -222,7 +222,7 @@
             <div class="info-section">
                 <h3>📋 Migration Overview</h3>
                 <p>This system will migrate user data from your SFGS database to the CBT system. Database configurations are pre-configured in the code.</p>
-                
+
                 <div class="info-grid">
                     <div class="info-item">
                         <strong>Source Database:</strong>
@@ -275,6 +275,18 @@
                     <div class="status-icon status-pending">⏳</div>
                     <span>Students Migration (students → cbt.users)</span>
                 </div>
+                <div class="status-item" id="status-classes">
+                    <div class="status-icon status-pending">⏳</div>
+                    <span>Classes Migration (classes → cbt.class_levels)</span>
+                </div>
+                <div class="status-item" id="status-sessions">
+                    <div class="status-icon status-pending">⏳</div>
+                    <span>Sessions Migration (sessions → cbt.sessions)</span>
+                </div>
+                <div class="status-item" id="status-terms">
+                    <div class="status-icon status-pending">⏳</div>
+                    <span>Terms Migration (terms → cbt.terms)</span>
+                </div>
 
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
@@ -297,26 +309,29 @@
         function log(message, type = 'info') {
             const timestamp = new Date().toLocaleTimeString();
             const logMessage = `[${timestamp}] ${message}`;
-            
+
             const logArea = document.getElementById('logArea');
             const logDiv = document.createElement('div');
             logDiv.textContent = logMessage;
-            
+
             if (type === 'error') logDiv.style.color = '#e74c3c';
             if (type === 'success') logDiv.style.color = '#27ae60';
             if (type === 'warning') logDiv.style.color = '#f39c12';
-            
+
             logArea.appendChild(logDiv);
             logArea.scrollTop = logArea.scrollHeight;
         }
 
         function updateStatus(statusId, state) {
-            const statusElement = document.getElementById(statusId);
+            const statusElement = document.getElementById(`status-${statusId}`);
             const icon = statusElement.querySelector('.status-icon');
-            
+
             icon.className = `status-icon status-${state}`;
-            
+
             switch(state) {
+                case 'pending':
+                    icon.textContent = '⏳';
+                    break;
                 case 'running':
                     icon.textContent = '⏳';
                     break;
@@ -336,22 +351,24 @@
             progressFill.style.width = percentage + '%';
         }
 
-        function showSummary(data) {
+        function showMigrationSummary(data) {
             const summaryBox = document.getElementById('summaryBox');
             const summaryContent = document.getElementById('summaryContent');
-            
+
             summaryContent.innerHTML = `
-                <p><strong>Total Users Migrated:</strong> ${data.total}</p>
-                <p><strong>Admins:</strong> ${data.admins}</p>
-                <p><strong>Teachers:</strong> ${data.teachers}</p>
-                <p><strong>Students:</strong> ${data.students}</p>
-                <p><strong>Migration Time:</strong> ${data.duration}s</p>
+                <p><strong>Total Users Migrated:</strong> ${data.total || 0}</p>
+                <p><strong>Admins:</strong> ${data.admins || 0}</p>
+                <p><strong>Teachers:</strong> ${data.teachers || 0}</p>
+                <p><strong>Students:</strong> ${data.students || 0}</p>
+                <p><strong>Classes Migrated:</strong> ${data.classes || 0}</p>
+                <p><strong>Sessions Migrated:</strong> ${data.sessions || 0}</p>
+                <p><strong>Terms Migrated:</strong> ${data.terms || 0}</p>
             `;
-            
+
             summaryBox.classList.add('show');
         }
 
-        async function makeRequest(action, data = {}) {
+        async function callMigrationAPI(action, data = {}) {
             try {
                 const response = await fetch('migrate.php', {
                     method: 'POST',
@@ -360,95 +377,122 @@
                     },
                     body: JSON.stringify({ action, ...data })
                 });
-                
+
                 const result = await response.json();
-                
+
                 if (!result.success) {
                     throw new Error(result.message || 'Unknown error occurred');
                 }
-                
+
                 return result;
             } catch (error) {
-                throw new Error(`Request failed: ${error.message}`);
+                throw new Error(`API request failed: ${error.message}`);
             }
         }
 
         async function startMigration() {
             const migrateBtn = document.getElementById('migrateBtn');
             const startTime = Date.now();
-            
+
             // Reset UI
             migrateBtn.disabled = true;
-            migrateBtn.textContent = '🔄 Migrating...';
+            migrateBtn.textContent = '⏳ Migrating...';
             document.getElementById('logArea').innerHTML = '';
             document.getElementById('summaryBox').classList.remove('show');
             updateProgress(0);
-            
+
             // Reset all status indicators
-            ['status-connection', 'status-admin', 'status-teachers', 'status-students'].forEach(id => {
+            ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms'].forEach(id => {
                 updateStatus(id, 'pending');
             });
-            
+
             log('🚀 Starting migration process...', 'info');
-            
+
             try {
                 // Step 1: Test database connections
                 log('Testing database connections...', 'info');
-                updateStatus('status-connection', 'running');
-                
-                const connectionTest = await makeRequest('test_connection');
+                updateStatus('connection', 'running');
+                const connectionResult = await callMigrationAPI('test_connection');
                 log('✓ Database connections successful', 'success');
-                updateStatus('status-connection', 'success');
-                updateProgress(10);
-                
+                updateStatus('connection', 'success');
+                updateProgress(5);
+
                 // Step 2: Migrate admins
                 log('Migrating admin users...', 'info');
-                updateStatus('status-admin', 'running');
-                
-                const adminResult = await makeRequest('migrate_admins');
+                updateStatus('admin', 'running');
+                const adminResult = await callMigrationAPI('migrate_admins');
                 log(`✓ Migrated ${adminResult.count} admin users`, 'success');
-                updateStatus('status-admin', 'success');
-                updateProgress(35);
-                
+                updateStatus('admin', 'success');
+                updateProgress(15);
+
                 // Step 3: Migrate teachers
                 log('Migrating teacher users...', 'info');
-                updateStatus('status-teachers', 'running');
-                
-                const teacherResult = await makeRequest('migrate_teachers');
+                updateStatus('teachers', 'running');
+                const teacherResult = await callMigrationAPI('migrate_teachers');
                 log(`✓ Migrated ${teacherResult.count} teacher users`, 'success');
-                updateStatus('status-teachers', 'success');
-                updateProgress(70);
-                
+                updateStatus('teachers', 'success');
+                updateProgress(25);
+
                 // Step 4: Migrate students
                 log('Migrating student users...', 'info');
-                updateStatus('status-students', 'running');
-                
-                const studentResult = await makeRequest('migrate_students');
+                updateStatus('students', 'running');
+                const studentResult = await callMigrationAPI('migrate_students');
                 log(`✓ Migrated ${studentResult.count} student users`, 'success');
-                updateStatus('status-students', 'success');
-                updateProgress(100);
-                
+                updateStatus('students', 'success');
+                updateProgress(35);
+
+                // Step 5: Migrate classes
+                log('Migrating classes...', 'info');
+                updateStatus('classes', 'running');
+                const classResult = await callMigrationAPI('migrate_classes');
+                log(`✓ Migrated ${classResult.count} classes`, 'success');
+                updateStatus('classes', 'success');
+                updateProgress(50);
+
+                // Step 6: Migrate sessions
+                log('Migrating sessions...', 'info');
+                updateStatus('sessions', 'running');
+                const sessionResult = await callMigrationAPI('migrate_sessions');
+                log(`✓ Migrated ${sessionResult.count} sessions`, 'success');
+                updateStatus('sessions', 'success');
+                updateProgress(70);
+
+                // Step 7: Migrate terms
+                log('Migrating terms...', 'info');
+                updateStatus('terms', 'running');
+                const termResult = await callMigrationAPI('migrate_terms');
+                log(`✓ Migrated ${termResult.count} terms`, 'success');
+                updateStatus('terms', 'success');
+                updateProgress(90);
+
                 // Show completion summary
                 const duration = Math.round((Date.now() - startTime) / 1000);
-                const totalUsers = adminResult.count + teacherResult.count + studentResult.count;
-                
+                const totalUsers = (adminResult.count || 0) + (teacherResult.count || 0) + (studentResult.count || 0);
+                const totalClasses = classResult.count || 0;
+                const totalSessions = sessionResult.count || 0;
+                const totalTerms = termResult.count || 0;
+
+
                 log('🎉 Migration completed successfully!', 'success');
-                log(`📊 Total: ${totalUsers} users migrated in ${duration}s`, 'success');
-                
-                showSummary({
+                log(`📊 Summary: ${totalUsers} users, ${totalClasses} classes, ${totalSessions} sessions, ${totalTerms} terms migrated in ${duration}s`, 'success');
+
+                showMigrationSummary({
                     total: totalUsers,
                     admins: adminResult.count,
                     teachers: teacherResult.count,
                     students: studentResult.count,
-                    duration: duration
+                    classes: totalClasses,
+                    sessions: totalSessions,
+                    terms: totalTerms
                 });
-                
+
             } catch (error) {
                 log(`❌ Migration failed: ${error.message}`, 'error');
-                
+
                 // Mark any running status as error
-                ['status-connection', 'status-admin', 'status-teachers', 'status-students'].forEach(id => {
-                    const icon = document.getElementById(id).querySelector('.status-icon');
+                ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms'].forEach(id => {
+                    const statusElement = document.getElementById(`status-${id}`);
+                    const icon = statusElement.querySelector('.status-icon');
                     if (icon.classList.contains('status-running')) {
                         updateStatus(id, 'error');
                     }
@@ -456,6 +500,7 @@
             } finally {
                 migrateBtn.disabled = false;
                 migrateBtn.textContent = '🚀 Start Migration';
+                updateProgress(100); // Ensure progress bar is full on completion or error
             }
         }
 
