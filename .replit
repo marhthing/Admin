@@ -5,16 +5,41 @@ modules = ["php-8.2", "web"]
 channel = "stable-24_05"
 
 [workflows]
-runButton = "PHP Server"
+runButton = "Project"
 
 [[workflows.workflow]]
 name = "PHP Server"
-author = "replit"
 mode = "parallel"
+author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "php -S 0.0.0.0:3000 -t ."
+args = "php -S 0.0.0.0:5000 -t ."
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Migration Server"
+
+[[workflows.workflow]]
+name = "Migration Server"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "php -S 0.0.0.0:5000 -t ."
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [[ports]]
 localPort = 3000
@@ -23,3 +48,6 @@ externalPort = 3000
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[agent]
+expertMode = true
