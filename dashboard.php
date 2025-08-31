@@ -50,69 +50,7 @@ $sessionInfo = getSessionInfo();
             margin: 0;
         }
 
-        .app-layout {
-            display: flex;
-            min-height: calc(100vh - 3rem);
-        }
 
-        /* Desktop Sidebar */
-        .sidebar {
-            width: 240px;
-            background: var(--surface);
-            border-right: 1px solid var(--border);
-            padding: 1.5rem;
-            flex-shrink: 0;
-            box-shadow: var(--shadow);
-            height: 100vh;
-            position: sticky;
-            top: 0;
-            overflow-y: auto;
-        }
-
-        .sidebar .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary);
-            letter-spacing: -0.025em;
-        }
-
-        .sidebar-nav ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .sidebar-nav li {
-            margin-bottom: 0.5rem;
-        }
-
-        .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.625rem 0.875rem;
-            border-radius: var(--radius-sm);
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: all 0.15s ease;
-        }
-
-        .sidebar-nav a:hover {
-            background: var(--background);
-            color: var(--primary);
-        }
-
-        .sidebar-nav a.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .sidebar-nav a span {
-            font-size: 1.125rem;
-        }
 
         /* Mobile Bottom Bar */
         .bottom-bar {
@@ -156,8 +94,9 @@ $sessionInfo = getSessionInfo();
         }
 
         .main-content {
-            flex: 1;
             padding: 1.5rem;
+            padding-bottom: 5rem;
+            max-width: 100%;
             overflow-x: auto;
         }
 
@@ -270,12 +209,6 @@ $sessionInfo = getSessionInfo();
             }
         }
 
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
 
         /* Database Status Styles */
         .status-overview {
@@ -467,13 +400,7 @@ $sessionInfo = getSessionInfo();
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .app-layout {
-                flex-direction: column;
-            }
 
-            .sidebar {
-                display: none;
-            }
 
             .session-bar {
                 margin-bottom: 0.5rem;
@@ -570,11 +497,6 @@ $sessionInfo = getSessionInfo();
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-                margin-bottom: 1rem;
-            }
 
             .db-connections {
                 grid-template-columns: 1fr;
@@ -884,9 +806,6 @@ $sessionInfo = getSessionInfo();
 
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
 
             .status-grid {
                 grid-template-columns: 1fr;
@@ -895,27 +814,6 @@ $sessionInfo = getSessionInfo();
 
         /* Mobile navigation improvements */
         @media (max-width: 768px) {
-            .sidebar-nav ul {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-                gap: 0.5rem;
-            }
-
-            .sidebar-nav li {
-                flex: 1;
-                min-width: 0;
-            }
-
-            .sidebar-nav a {
-                padding: 0.5rem;
-                text-align: center;
-                font-size: 0.8125rem;
-            }
-
-            .sidebar-nav a span {
-                font-size: 1rem;
-            }
 
             .session-bar {
                 flex-direction: column;
@@ -931,10 +829,6 @@ $sessionInfo = getSessionInfo();
             }
             }
 
-            .main-content {
-                gap: 1rem;
-                margin-bottom: 1rem;
-            }
 
             .info-section,
             .migration-controls,
@@ -991,37 +885,25 @@ $sessionInfo = getSessionInfo();
         </button>
     </div>
 
-    <div class="app-layout">
-        <!-- Desktop Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">CBT Sync</div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li><a href="dashboard.php" class="active"><span class="icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/></svg></span> <span>Dashboard</span></a></li>
-                    <li><a href="results.php"><span class="icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V2.5A1.5 1.5 0 0 1 1.5 1H3a.5.5 0 0 1 0 1H1.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V13a.5.5 0 0 1 1 0v.5a1.5 1.5 0 0 1-1.5 1.5h-11zM7 11.5a.5.5 0 0 1-.5-.5V8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L5.793 8H3.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zM15 2.5a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0 0 1h2.793L10.646 5.646a.5.5 0 0 0 .708.708L14 3.707V6.5a.5.5 0 0 0 1 0v-4z"/></svg></span> <span>CBT Results</span></a></li>
-                </ul>
-            </nav>
-        </aside>
+    <!-- Mobile Bottom Bar -->
+    <nav class="bottom-bar">
+        <div class="bottom-nav">
+            <a href="dashboard.php" class="bottom-nav-item active">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5z"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="results.php" class="bottom-nav-item">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V2.5A1.5 1.5 0 0 1 1.5 1H3a.5.5 0 0 1 0 1H1.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V13a.5.5 0 0 1 1 0v.5a1.5 1.5 0 0 1-1.5 1.5h-11zM7 11.5a.5.5 0 0 1-.5-.5V8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L5.793 8H3.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zM15 2.5a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0 0 1h2.793L10.646 5.646a.5.5 0 0 0 .708.708L14 3.707V6.5a.5.5 0 0 0 1 0v-4z"/>
+                </svg>
+                <span>Results</span>
+            </a>
+        </div>
+    </nav>
 
-        <!-- Mobile Bottom Bar -->
-        <nav class="bottom-bar">
-            <div class="bottom-nav">
-                <a href="dashboard.php" class="bottom-nav-item active">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5z"/>
-                    </svg>
-                    <span>Dashboard</span>
-                </a>
-                <a href="results.php" class="bottom-nav-item">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                        <path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V2.5A1.5 1.5 0 0 1 1.5 1H3a.5.5 0 0 1 0 1H1.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V13a.5.5 0 0 1 1 0v.5a1.5 1.5 0 0 1-1.5 1.5h-11zM7 11.5a.5.5 0 0 1-.5-.5V8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L5.793 8H3.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zM15 2.5a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0 0 1h2.793L10.646 5.646a.5.5 0 0 0 .708.708L14 3.707V6.5a.5.5 0 0 0 1 0v-4z"/>
-                    </svg>
-                    <span>Results</span>
-                </a>
-            </div>
-        </nav>
-
-        <main class="main-content">
+    <main class="main-content">
             <div class="page-header">
                 <h1>Database Migration System</h1>
                 <p>SFGS → CBT Data Synchronization</p>
