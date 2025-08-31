@@ -127,54 +127,61 @@ $sessionInfo = getSessionInfo();
 
         /* Desktop Sidebar */
         .sidebar {
-            width: 250px;
+            width: 240px;
             background: var(--surface);
-            border-right: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .sidebar-header {
+            border-right: 1px solid var(--border);
             padding: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            box-shadow: var(--shadow);
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            overflow-y: auto;
         }
 
-        .sidebar-header h2 {
+        .sidebar .logo {
+            text-align: center;
+            margin-bottom: 2rem;
             font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
+            font-weight: 600;
+            color: var(--primary);
+            letter-spacing: -0.025em;
         }
 
-        .nav-menu {
-            padding: 1rem 0;
+        .sidebar-nav ul {
+            list-style: none;
+            padding: 0;
         }
 
-        .nav-item {
-            display: block;
-            padding: 0.75rem 1.5rem;
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.875rem;
+            border-radius: var(--radius-sm);
             color: var(--text-secondary);
             text-decoration: none;
-            transition: all 0.2s ease;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.15s ease;
         }
 
-        .nav-item:hover {
-            background-color: var(--background-color);
-            color: var(--text-primary);
+        .sidebar-nav a:hover {
+            background: var(--background);
+            color: var(--primary);
         }
 
-        .nav-item.active {
-            background-color: var(--primary);
+        .sidebar-nav a.active {
+            background: var(--primary);
             color: white;
-            font-weight: 600;
         }
 
-        .nav-item i {
-            margin-right: 0.75rem;
-            width: 1.25rem;
+        .sidebar-nav a span {
+            font-size: 1.125rem;
         }
 
         /* Mobile Bottom Bar */
@@ -478,7 +485,39 @@ $sessionInfo = getSessionInfo();
         /* Responsive Design */
         @media (max-width: 768px) {
             .sidebar {
-                display: none;
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1rem;
+            }
+
+            .sidebar .logo {
+                margin-bottom: 1rem;
+                font-size: 1.125rem;
+            }
+
+            .sidebar-nav ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 0.5rem;
+            }
+
+            .sidebar-nav li {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .sidebar-nav a {
+                padding: 0.5rem;
+                text-align: center;
+                font-size: 0.8125rem;
+            }
+
+            .sidebar-nav a span {
+                font-size: 1rem;
             }
 
             .bottom-bar {
@@ -552,21 +591,15 @@ $sessionInfo = getSessionInfo();
 
     <div class="app-layout">
         <!-- Desktop Sidebar -->
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <h2>SFGS System</h2>
-            </div>
-            <div class="nav-menu">
-                <a href="dashboard.php" class="nav-item">
-                    <i>🏠</i>
-                    Migration Dashboard
-                </a>
-                <a href="results.php" class="nav-item active">
-                    <i>📊</i>
-                    CBT Results
-                </a>
-            </div>
-        </nav>
+        <aside class="sidebar">
+            <div class="logo">CBT Sync</div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="dashboard.php"><span class="icon">📊</span> <span>Dashboard</span></a></li>
+                    <li><a href="results.php" class="active"><span class="icon">📈</span> <span>CBT Results</span></a></li>
+                </ul>
+            </nav>
+        </aside></nav>
 
         <!-- Mobile Bottom Bar -->
         <nav class="bottom-bar">
