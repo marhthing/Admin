@@ -1,12 +1,15 @@
-modules = ["web", "php-8.2"][nix]
-channel = "stable-25_05"
+
+modules = ["php-8.2", "web"]
+
+[nix]
+channel = "stable-24_05"
 
 [workflows]
 runButton = "PHP Server"
 
 [[workflows.workflow]]
 name = "PHP Server"
-author = "agent"
+author = "replit"
 mode = "parallel"
 
 [[workflows.workflow.tasks]]
