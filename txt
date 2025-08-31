@@ -1,0 +1,13 @@
+it should edit my sfgs db ohh, its job is to fetch, the only db allowed to be altered is cbt
+
+then i want to add more syncing 
+next is class
+
+this is where my class is 
+CREATE TABLE classes (   id int(10) NOT NULL,   classes varchar(50) DEFAULT NULL,   date_added varchar(50) DEFAULT NULL,   time_added timestamp NULL DEFAULT current_timestamp() ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+i want to same way, it should fetch only need data and insert into 
+CREATE TABLE class_levels (   id int(11) NOT NULL,   name varchar(50) NOT NULL,   display_name varchar(100) NOT NULL,   display_order int(11) NOT NULL,   level_type enum('junior','senior') NOT NULL,   is_active tinyint(1) DEFAULT 1,   created_at timestamp NULL DEFAULT current_timestamp() ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci; 
+
+then sessions too
+term too
