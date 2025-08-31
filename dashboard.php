@@ -1497,47 +1497,7 @@ $sessionInfo = getSessionInfo();
         // Auto-test connections on page load
         window.addEventListener('load', function() {
             testDatabaseConnections();
-        });tor.className = 'connection-indicator connected';
-                        sfgsStatus.textContent = 'Connected';
-                        sfgsStatus.style.color = 'var(--success)';
-                    } else {
-                        sfgsIndicator.className = 'connection-indicator error';
-                        sfgsStatus.textContent = 'Connection failed';
-                        sfgsStatus.style.color = 'var(--error)';
-                    }
-                    
-                    // Update CBT status
-                    if (result.connections.cbt.status === 'connected') {
-                        cbtIndicator.className = 'connection-indicator connected';
-                        cbtStatus.textContent = 'Connected';
-                        cbtStatus.style.color = 'var(--success)';
-                    } else {
-                        cbtIndicator.className = 'connection-indicator error';
-                        cbtStatus.textContent = 'Connection failed';
-                        cbtStatus.style.color = 'var(--error)';
-                    }
-                } else {
-                    // Both failed
-                    sfgsIndicator.className = 'connection-indicator error';
-                    cbtIndicator.className = 'connection-indicator error';
-                    sfgsStatus.textContent = 'Test failed';
-                    cbtStatus.textContent = 'Test failed';
-                    sfgsStatus.style.color = 'var(--error)';
-                    cbtStatus.style.color = 'var(--error)';
-                }
-            } catch (error) {
-                console.error('Connection test failed:', error);
-                sfgsIndicator.className = 'connection-indicator error';
-                cbtIndicator.className = 'connection-indicator error';
-                sfgsStatus.textContent = 'Test failed';
-                cbtStatus.textContent = 'Test failed';
-                sfgsStatus.style.color = 'var(--error)';
-                cbtStatus.style.color = 'var(--error)';
-            } finally {
-                testBtn.disabled = false;
-                testBtn.textContent = 'Refresh Status';
-            }
-        }
+        });
 
         // Initialize
         window.onload = function() {
