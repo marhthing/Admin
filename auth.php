@@ -1,4 +1,3 @@
-
 <?php
 /**
  * Secure Authentication System

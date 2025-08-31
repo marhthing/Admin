@@ -16,5 +16,9 @@ task = "shell.exec"
 args = "php -S 0.0.0.0:3000 -t ."
 
 [[ports]]
+localPort = 3000
+externalPort = 3000
+
+[[ports]]
 localPort = 5000
 externalPort = 80
