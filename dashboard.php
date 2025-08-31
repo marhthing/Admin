@@ -316,11 +316,11 @@ $sessionInfo = getSessionInfo();
             padding: 1.5rem;
             text-align: center;
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
         }
 
         .migrate-btn {
-            background: var(--primary-color);
+            background: var(--primary);
             color: white;
             border: none;
             padding: 0.875rem 2rem;
@@ -341,7 +341,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .migrate-btn:disabled {
-            background: var(--secondary-color);
+            background: var(--secondary);
             cursor: not-allowed;
             opacity: 0.7;
         }
@@ -351,7 +351,7 @@ $sessionInfo = getSessionInfo();
             border-radius: 0.75rem;
             padding: 1.5rem;
             box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             grid-column: 1 / -1;
         }
 
@@ -374,7 +374,7 @@ $sessionInfo = getSessionInfo();
             padding: 0.875rem;
             background: var(--background-color);
             border-radius: 0.5rem;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             transition: all 0.2s ease;
         }
 

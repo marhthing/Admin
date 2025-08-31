@@ -106,7 +106,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .logout-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--error);
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -167,7 +167,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .nav-item.active {
-            background-color: var(--primary-color);
+            background-color: var(--primary);
             color: white;
             font-weight: 600;
         }
@@ -210,7 +210,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .bottom-nav-item.active {
-            color: var(--primary-color);
+            color: var(--primary);
             font-weight: 600;
         }
 
@@ -284,7 +284,7 @@ $sessionInfo = getSessionInfo();
 
         .filter-group select:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
@@ -309,7 +309,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .btn-primary {
-            background: var(--primary-color);
+            background: var(--primary);
             color: white;
         }
 
@@ -318,7 +318,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .btn-secondary {
-            background: var(--secondary-color);
+            background: var(--secondary);
             color: white;
         }
 
@@ -327,7 +327,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .btn-danger {
-            background: var(--error-color);
+            background: var(--error);
             color: white;
         }
 
@@ -452,7 +452,7 @@ $sessionInfo = getSessionInfo();
         }
 
         .modal-header i {
-            color: var(--error-color);
+            color: var(--error);
             font-size: 1.5rem;
             margin-right: 0.75rem;
         }
@@ -706,7 +706,7 @@ $sessionInfo = getSessionInfo();
                 <p>Are you sure you want to delete this result?</p>
                 <p><strong>Student:</strong> <span id="deleteStudentName"></span></p>
                 <p><strong>Subject:</strong> <span id="deleteSubject"></span></p>
-                <p style="color: var(--error-color); font-weight: 600; margin-top: 1rem;">This action cannot be undone.</p>
+                <p style="color: var(--error); font-weight: 600; margin-top: 1rem;">This action cannot be undone.</p>
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
