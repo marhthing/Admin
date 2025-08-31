@@ -521,7 +521,7 @@ $sessionInfo = getSessionInfo();
 
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 0.75rem;
             margin-bottom: 1rem;
         }
@@ -598,7 +598,7 @@ $sessionInfo = getSessionInfo();
             }
 
             .stats-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
                 gap: 0.5rem;
             }
 
@@ -1126,6 +1126,10 @@ $sessionInfo = getSessionInfo();
                                 <div class="stat-label">Sessions</div>
                             </div>
                             <div class="stat-item">
+                                <div class="stat-number" id="totalSubjectsCount">-</div>
+                                <div class="stat-label">Subjects</div>
+                            </div>
+                            <div class="stat-item">
                                 <div class="stat-number" id="lastSyncTime">Never</div>
                                 <div class="stat-label">Last Sync</div>
                             </div>
@@ -1606,6 +1610,7 @@ $sessionInfo = getSessionInfo();
                     document.getElementById('totalUsersCount').textContent = result.stats.total_users || '0';
                     document.getElementById('totalClassesCount').textContent = result.stats.total_classes || '0';
                     document.getElementById('totalSessionsCount').textContent = result.stats.total_sessions || '0';
+                    document.getElementById('totalSubjectsCount').textContent = result.stats.total_subjects || '0';
                     document.getElementById('lastSyncTime').textContent = result.stats.last_sync || 'Never';
                 }
             } catch (error) {

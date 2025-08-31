@@ -6,43 +6,60 @@ require_once 'db.php';
 requireAuth();
 
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
 try {
     $stats = [
         'total_users' => 0,
         'total_classes' => 0,
         'total_sessions' => 0,
+        'total_subjects' => 0,
         'last_sync' => 'Never'
     ];
     
-    // Get user count from CBT database
+    // Get statistics from CBT database using PDO
     $cbt_conn = createConnection('cbt');
     if ($cbt_conn) {
-        $result = $cbt_conn->query("SELECT COUNT(*) as count FROM users");
+        // Get total users count
+        $stmt = $cbt_conn->prepare("SELECT COUNT(*) as count FROM users");
+        $stmt->execute();
+        $result = $stmt->fetch();
         if ($result) {
-            $row = $result->fetch_assoc();
-            $stats['total_users'] = $row['count'];
+            $stats['total_users'] = $result['count'];
         }
         
-        $result = $cbt_conn->query("SELECT COUNT(*) as count FROM class_levels");
+        // Get total classes count
+        $stmt = $cbt_conn->prepare("SELECT COUNT(*) as count FROM class_levels");
+        $stmt->execute();
+        $result = $stmt->fetch();
         if ($result) {
-            $row = $result->fetch_assoc();
-            $stats['total_classes'] = $row['count'];
+            $stats['total_classes'] = $result['count'];
         }
         
-        $result = $cbt_conn->query("SELECT COUNT(*) as count FROM sessions");
+        // Get total sessions count
+        $stmt = $cbt_conn->prepare("SELECT COUNT(*) as count FROM sessions");
+        $stmt->execute();
+        $result = $stmt->fetch();
         if ($result) {
-            $row = $result->fetch_assoc();
-            $stats['total_sessions'] = $row['count'];
+            $stats['total_sessions'] = $result['count'];
+        }
+        
+        // Get total subjects count
+        $stmt = $cbt_conn->prepare("SELECT COUNT(*) as count FROM subjects");
+        $stmt->execute();
+        $result = $stmt->fetch();
+        if ($result) {
+            $stats['total_subjects'] = $result['count'];
         }
         
         // Check if migration has ever run by looking for any users with hashed passwords
-        $result = $cbt_conn->query("SELECT MAX(created_at) as last_update FROM users WHERE password LIKE '$2y$%' LIMIT 1");
-        if ($result) {
-            $row = $result->fetch_assoc();
-            if ($row['last_update']) {
-                $stats['last_sync'] = date('M j, H:i', strtotime($row['last_update']));
-            }
+        $stmt = $cbt_conn->prepare("SELECT MAX(created_at) as last_update FROM users WHERE password LIKE ? LIMIT 1");
+        $stmt->execute(['$2y$%']);
+        $result = $stmt->fetch();
+        if ($result && $result['last_update']) {
+            $stats['last_sync'] = date('M j, H:i', strtotime($result['last_update']));
         }
         
         $cbt_conn = null;
