@@ -37,6 +37,45 @@
             min-height: 100vh;
         }
 
+        .session-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .session-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .session-timer {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -329,6 +368,15 @@
             margin-right: 0.5rem;
         }
 
+        .security-alert {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: var(--error-color);
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .main-content {
@@ -343,6 +391,12 @@
         @media (max-width: 768px) {
             .container {
                 padding: 0.5rem;
+            }
+
+            .session-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
             }
 
             .header {
@@ -400,6 +454,16 @@
     </style>
 </head>
 <body>
+    <div class="session-bar">
+        <div class="session-info">
+            <span>🔐 Authenticated Session</span>
+            <span class="session-timer" id="sessionTimer">5:00</span>
+        </div>
+        <button class="logout-btn" onclick="logout()">
+            🚪 Logout
+        </button>
+    </div>
+
     <div class="container">
         <div class="header">
             <h1>Database Migration System</h1>
@@ -409,6 +473,11 @@
         <div class="main-content">
             <div class="info-section">
                 <h3>📋 Migration Overview</h3>
+                <div class="security-alert">
+                    <span class="alert-icon">🔐</span>
+                    <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
+                </div>
+                
                 <div class="alert">
                     <span class="alert-icon">⚠️</span>
                     Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
@@ -425,15 +494,15 @@
                     </div>
                     <div class="info-item">
                         <strong>Admin Users</strong>
-                        <span>sfgs.users → cbt.users</span>
+                        <span>sfgs.users → cbt.users (passwords hashed)</span>
                     </div>
                     <div class="info-item">
                         <strong>Teachers</strong>
-                        <span>sfgs.teachers → cbt.users</span>
+                        <span>sfgs.teachers → cbt.users (passwords hashed)</span>
                     </div>
                     <div class="info-item">
                         <strong>Students</strong>
-                        <span>sfgs.students → cbt.users</span>
+                        <span>sfgs.students → cbt.users (passwords hashed)</span>
                     </div>
                     <div class="info-item">
                         <strong>Classes</strong>
@@ -453,7 +522,7 @@
             <div class="migration-controls">
                 <h3>🚀 Start Migration</h3>
                 <p style="margin-bottom: 1rem; color: var(--text-secondary);">
-                    Click to begin intelligent data synchronization
+                    Click to begin intelligent data synchronization with detailed step logging
                 </p>
                 <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
                     <span>🔄</span>
@@ -463,7 +532,7 @@
         </div>
 
         <div class="status-section">
-            <h3>Migration Status</h3>
+            <h3>Migration Status & Detailed Logs</h3>
             
             <div class="status-grid">
                 <div class="status-item" id="status-connection">
@@ -472,15 +541,15 @@
                 </div>
                 <div class="status-item" id="status-admin">
                     <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Admin Migration</span>
+                    <span class="status-text">Admin Migration (Password Hashing)</span>
                 </div>
                 <div class="status-item" id="status-teachers">
                     <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Teachers Migration</span>
+                    <span class="status-text">Teachers Migration (Password Hashing)</span>
                 </div>
                 <div class="status-item" id="status-students">
                     <div class="status-icon status-pending">⏳</div>
-                    <span class="status-text">Students Migration</span>
+                    <span class="status-text">Students Migration (Password Hashing)</span>
                 </div>
                 <div class="status-item" id="status-classes">
                     <div class="status-icon status-pending">⏳</div>
@@ -510,14 +579,58 @@
 
             <div class="log-container">
                 <div class="log-area" id="logArea">
-                    <div style="color: #94a3b8;">📋 Migration logs will appear here...</div>
-                    <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the process.</div>
+                    <div style="color: #94a3b8;">📋 Detailed migration logs will appear here...</div>
+                    <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
+                    <div style="color: #fbbf24;">🔐 Security Note: All passwords will be converted from plain text to secure hash.</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Session management
+        let sessionTimeRemaining = 300; // 5 minutes
+        let sessionTimer;
+
+        function updateSessionTimer() {
+            const minutes = Math.floor(sessionTimeRemaining / 60);
+            const seconds = sessionTimeRemaining % 60;
+            document.getElementById('sessionTimer').textContent = 
+                `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (sessionTimeRemaining <= 0) {
+                alert('Session expired. You will be redirected to login.');
+                logout();
+                return;
+            }
+            
+            sessionTimeRemaining--;
+        }
+
+        function resetSessionTimer() {
+            sessionTimeRemaining = 300;
+            fetch('session_ping.php', { method: 'POST' }); // Ping server to reset session
+        }
+
+        function startSessionTimer() {
+            sessionTimer = setInterval(updateSessionTimer, 1000);
+        }
+
+        function logout() {
+            if (sessionTimer) {
+                clearInterval(sessionTimer);
+            }
+            fetch('logout.php', { method: 'POST' })
+                .then(() => {
+                    window.location.href = 'login.php';
+                });
+        }
+
+        // Reset session timer on user activity
+        ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+            document.addEventListener(event, resetSessionTimer, true);
+        });
+
         function log(message, type = 'info') {
             const timestamp = new Date().toLocaleTimeString();
             const logMessage = `[${timestamp}] ${message}`;
@@ -530,7 +643,8 @@
                 error: '#f87171',
                 success: '#4ade80',
                 warning: '#fbbf24',
-                info: '#e2e8f0'
+                info: '#e2e8f0',
+                security: '#fb7185'
             };
 
             logDiv.style.color = colors[type] || colors.info;
@@ -595,6 +709,10 @@
                     ${data.terms || 0}
                 </div>
                 <div class="summary-item">
+                    <strong>Passwords Hashed</strong>
+                    ${data.passwords_hashed || 0}
+                </div>
+                <div class="summary-item">
                     <strong>Duration</strong>
                     ${data.duration || '0'}s
                 </div>
@@ -641,7 +759,8 @@
                 updateStatus(id, 'pending');
             });
 
-            log('🚀 Starting smart synchronization process...', 'info');
+            log('🚀 Starting secure smart synchronization process...', 'info');
+            log('🔐 Security Mode: All passwords will be hashed before insertion', 'security');
 
             try {
                 // Step 1: Test database connections
@@ -653,26 +772,29 @@
                 updateProgress(10);
 
                 // Step 2: Migrate admins
-                log('Synchronizing admin users...', 'info');
+                log('Synchronizing admin users with password hashing...', 'info');
                 updateStatus('admin', 'running');
                 const adminResult = await callMigrationAPI('migrate_admins');
                 log(`✓ ${adminResult.message}`, 'success');
+                log(`🔐 Hashed ${adminResult.details?.passwords_hashed || 0} admin passwords`, 'security');
                 updateStatus('admin', 'success');
                 updateProgress(20);
 
                 // Step 3: Migrate teachers
-                log('Synchronizing teacher users...', 'info');
+                log('Synchronizing teacher users with password hashing...', 'info');
                 updateStatus('teachers', 'running');
                 const teacherResult = await callMigrationAPI('migrate_teachers');
                 log(`✓ ${teacherResult.message}`, 'success');
+                log(`🔐 Hashed ${teacherResult.details?.passwords_hashed || 0} teacher passwords`, 'security');
                 updateStatus('teachers', 'success');
                 updateProgress(35);
 
                 // Step 4: Migrate students
-                log('Synchronizing student users...', 'info');
+                log('Synchronizing student users with password hashing...', 'info');
                 updateStatus('students', 'running');
                 const studentResult = await callMigrationAPI('migrate_students');
                 log(`✓ ${studentResult.message}`, 'success');
+                log(`🔐 Hashed ${studentResult.details?.passwords_hashed || 0} student passwords`, 'security');
                 updateStatus('students', 'success');
                 updateProgress(50);
 
@@ -703,8 +825,12 @@
                 // Show completion summary
                 const duration = Math.round((Date.now() - startTime) / 1000);
                 const totalUsers = (adminResult.count || 0) + (teacherResult.count || 0) + (studentResult.count || 0);
+                const totalPasswordsHashed = (adminResult.details?.passwords_hashed || 0) + 
+                                           (teacherResult.details?.passwords_hashed || 0) + 
+                                           (studentResult.details?.passwords_hashed || 0);
 
-                log('🎉 Smart synchronization completed successfully!', 'success');
+                log('🎉 Secure smart synchronization completed successfully!', 'success');
+                log(`🔐 Total passwords securely hashed: ${totalPasswordsHashed}`, 'security');
                 updateProgress(100);
 
                 showMigrationSummary({
@@ -715,6 +841,7 @@
                     classes: classResult.count,
                     sessions: sessionResult.count,
                     terms: termResult.count,
+                    passwords_hashed: totalPasswordsHashed,
                     duration: duration
                 });
 
@@ -737,7 +864,9 @@
 
         // Initialize
         window.onload = function() {
-            log('System initialized and ready for smart synchronization.', 'info');
+            startSessionTimer();
+            log('System initialized and ready for secure synchronization.', 'info');
+            log('🔐 Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
             log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
         };
     </script>

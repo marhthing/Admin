@@ -12,6 +12,30 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
 require_once 'db.php';
+require_once 'auth.php';
+
+// Require authentication for all migration operations
+requireAuth();
+
+// Global variable to store detailed logs
+$detailedLogs = [];
+
+/**
+ * Add detailed step logging
+ */
+function logDetailedStep($message) {
+    global $detailedLogs;
+    $timestamp = date('H:i:s');
+    $detailedLogs[] = "[$timestamp] $message";
+}
+
+/**
+ * Get detailed logs
+ */
+function getDetailedLogs() {
+    global $detailedLogs;
+    return $detailedLogs;
+}
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -92,11 +116,14 @@ function testDatabaseConnections() {
 
 /**
  * Smart migrate admin users - only insert/update missing or incorrect data
+ * SECURITY: All passwords from SFGS (plain text) are hashed before insertion
  */
 function migrateAdmins() {
     $connections = getDatabaseConnections();
     $sfgs = $connections['sfgs'];
     $cbt = $connections['cbt'];
+    
+    logDetailedStep("🔍 Fetching admin users from SFGS database...");
     
     // Get admin users from SFGS
     $stmt = $sfgs->prepare("
@@ -107,6 +134,10 @@ function migrateAdmins() {
     $stmt->execute();
     $sfgsAdmins = $stmt->fetchAll();
     
+    logDetailedStep("📊 Found " . count($sfgsAdmins) . " admin users in SFGS");
+    
+    logDetailedStep("🔍 Checking existing admin users in CBT database...");
+    
     // Get existing admins from CBT
     $existingStmt = $cbt->prepare("
         SELECT reg_number, email, full_name 
@@ -115,6 +146,8 @@ function migrateAdmins() {
     ");
     $existingStmt->execute();
     $existingAdmins = $existingStmt->fetchAll();
+    
+    logDetailedStep("📊 Found " . count($existingAdmins) . " existing admin users in CBT");
     
     // Create lookup array for existing admins
     $existingLookup = [];
@@ -126,16 +159,23 @@ function migrateAdmins() {
     $updated = 0;
     $skipped = 0;
     
+    logDetailedStep("🔄 Starting admin user synchronization process...");
+    
     foreach ($sfgsAdmins as $admin) {
         $reg_number = 'ADM' . str_pad($admin['id'], 4, '0', STR_PAD_LEFT);
+        
+        logDetailedStep("👤 Processing admin: {$admin['fullname']} (ID: {$admin['id']}, Reg: {$reg_number})");
         
         if (isset($existingLookup[$reg_number])) {
             // Check if data matches
             $existing = $existingLookup[$reg_number];
             if ($existing['email'] === $admin['email'] && $existing['full_name'] === $admin['fullname']) {
+                logDetailedStep("✅ Admin {$reg_number} data is current - skipping");
                 $skipped++;
                 continue; // Data is correct, skip
             } else {
+                logDetailedStep("🔄 Updating admin {$reg_number} with new data");
+                
                 // Update existing record
                 $updateStmt = $cbt->prepare("
                     UPDATE users SET 
@@ -152,10 +192,17 @@ function migrateAdmins() {
                     'full_name' => $admin['fullname'],
                     'reg_number' => $reg_number
                 ]);
+                
+                logDetailedStep("✅ Successfully updated admin {$reg_number}");
                 $updated++;
             }
         } else {
-            // Insert new record
+            logDetailedStep("🆕 Creating new admin user {$reg_number}");
+            logDetailedStep("🔐 Hashing password for security (converting from plain text)");
+            
+            // Insert new record with hashed password
+            $hashedPassword = password_hash($admin['password'], PASSWORD_DEFAULT);
+            
             $insertStmt = $cbt->prepare("
                 INSERT INTO users (
                     username, email, reg_number, password, role, full_name, 
@@ -170,12 +217,16 @@ function migrateAdmins() {
                 'username' => $admin['email'],
                 'email' => $admin['email'],
                 'reg_number' => $reg_number,
-                'password' => password_hash($admin['password'], PASSWORD_DEFAULT),
+                'password' => $hashedPassword,
                 'full_name' => $admin['fullname']
             ]);
+            
+            logDetailedStep("✅ Successfully created admin {$reg_number} with hashed password");
             $inserted++;
         }
     }
+    
+    logDetailedStep("🎉 Admin synchronization complete!");
     
     return [
         'success' => true,
@@ -183,17 +234,25 @@ function migrateAdmins() {
         'inserted' => $inserted,
         'updated' => $updated,
         'skipped' => $skipped,
-        'message' => "Admin sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped"
+        'message' => "Admin sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped",
+        'details' => [
+            'total_processed' => count($sfgsAdmins),
+            'passwords_hashed' => $inserted,
+            'security_note' => 'All passwords converted from plain text to secure hash'
+        ]
     ];
 }
 
 /**
  * Smart migrate teacher users
+ * SECURITY: All passwords from SFGS (plain text) are hashed before insertion
  */
 function migrateTeachers() {
     $connections = getDatabaseConnections();
     $sfgs = $connections['sfgs'];
     $cbt = $connections['cbt'];
+    
+    logDetailedStep("🔍 Fetching teacher users from SFGS database...");
     
     // Get teacher users from SFGS
     $stmt = $sfgs->prepare("
@@ -204,6 +263,10 @@ function migrateTeachers() {
     $stmt->execute();
     $sfgsTeachers = $stmt->fetchAll();
     
+    logDetailedStep("📊 Found " . count($sfgsTeachers) . " teacher users in SFGS");
+    
+    logDetailedStep("🔍 Checking existing teacher users in CBT database...");
+    
     // Get existing teachers from CBT
     $existingStmt = $cbt->prepare("
         SELECT reg_number, email, full_name 
@@ -212,6 +275,8 @@ function migrateTeachers() {
     ");
     $existingStmt->execute();
     $existingTeachers = $existingStmt->fetchAll();
+    
+    logDetailedStep("📊 Found " . count($existingTeachers) . " existing teacher users in CBT");
     
     // Create lookup array for existing teachers
     $existingLookup = [];
@@ -223,16 +288,23 @@ function migrateTeachers() {
     $updated = 0;
     $skipped = 0;
     
+    logDetailedStep("🔄 Starting teacher user synchronization process...");
+    
     foreach ($sfgsTeachers as $teacher) {
         $reg_number = 'TCH' . str_pad($teacher['id'], 4, '0', STR_PAD_LEFT);
+        
+        logDetailedStep("👨‍🏫 Processing teacher: {$teacher['fullname']} (ID: {$teacher['id']}, Reg: {$reg_number})");
         
         if (isset($existingLookup[$reg_number])) {
             // Check if data matches
             $existing = $existingLookup[$reg_number];
             if ($existing['email'] === $teacher['email'] && $existing['full_name'] === $teacher['fullname']) {
+                logDetailedStep("✅ Teacher {$reg_number} data is current - skipping");
                 $skipped++;
                 continue; // Data is correct, skip
             } else {
+                logDetailedStep("🔄 Updating teacher {$reg_number} with new data");
+                
                 // Update existing record
                 $updateStmt = $cbt->prepare("
                     UPDATE users SET 
@@ -249,10 +321,17 @@ function migrateTeachers() {
                     'full_name' => $teacher['fullname'],
                     'reg_number' => $reg_number
                 ]);
+                
+                logDetailedStep("✅ Successfully updated teacher {$reg_number}");
                 $updated++;
             }
         } else {
-            // Insert new record
+            logDetailedStep("🆕 Creating new teacher user {$reg_number}");
+            logDetailedStep("🔐 Hashing password for security (converting from plain text)");
+            
+            // Insert new record with hashed password
+            $hashedPassword = password_hash($teacher['password'], PASSWORD_DEFAULT);
+            
             $insertStmt = $cbt->prepare("
                 INSERT INTO users (
                     username, email, reg_number, password, role, full_name, 
@@ -267,12 +346,16 @@ function migrateTeachers() {
                 'username' => $teacher['email'],
                 'email' => $teacher['email'],
                 'reg_number' => $reg_number,
-                'password' => password_hash($teacher['password'], PASSWORD_DEFAULT),
+                'password' => $hashedPassword,
                 'full_name' => $teacher['fullname']
             ]);
+            
+            logDetailedStep("✅ Successfully created teacher {$reg_number} with hashed password");
             $inserted++;
         }
     }
+    
+    logDetailedStep("🎉 Teacher synchronization complete!");
     
     return [
         'success' => true,
@@ -280,17 +363,25 @@ function migrateTeachers() {
         'inserted' => $inserted,
         'updated' => $updated,
         'skipped' => $skipped,
-        'message' => "Teacher sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped"
+        'message' => "Teacher sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped",
+        'details' => [
+            'total_processed' => count($sfgsTeachers),
+            'passwords_hashed' => $inserted,
+            'security_note' => 'All passwords converted from plain text to secure hash'
+        ]
     ];
 }
 
 /**
  * Smart migrate student users
+ * SECURITY: All passwords from SFGS (plain text) are hashed before insertion
  */
 function migrateStudents() {
     $connections = getDatabaseConnections();
     $sfgs = $connections['sfgs'];
     $cbt = $connections['cbt'];
+    
+    logDetailedStep("🔍 Fetching student users from SFGS database...");
     
     // Get student users from SFGS
     $stmt = $sfgs->prepare("
@@ -302,6 +393,10 @@ function migrateStudents() {
     $stmt->execute();
     $sfgsStudents = $stmt->fetchAll();
     
+    logDetailedStep("📊 Found " . count($sfgsStudents) . " student users in SFGS");
+    
+    logDetailedStep("🔍 Checking existing student users in CBT database...");
+    
     // Get existing students from CBT
     $existingStmt = $cbt->prepare("
         SELECT reg_number, email, full_name 
@@ -310,6 +405,8 @@ function migrateStudents() {
     ");
     $existingStmt->execute();
     $existingStudents = $existingStmt->fetchAll();
+    
+    logDetailedStep("📊 Found " . count($existingStudents) . " existing student users in CBT");
     
     // Create lookup array for existing students
     $existingLookup = [];
@@ -320,6 +417,8 @@ function migrateStudents() {
     $inserted = 0;
     $updated = 0;
     $skipped = 0;
+    
+    logDetailedStep("🔄 Starting student user synchronization process...");
     
     foreach ($sfgsStudents as $student) {
         // Build full name
@@ -332,13 +431,18 @@ function migrateStudents() {
         $email = strtolower($student['reg_number']) . '@student.school.edu';
         $username = $student['reg_number'];
         
+        logDetailedStep("👨‍🎓 Processing student: {$full_name} (Reg: {$student['reg_number']})");
+        
         if (isset($existingLookup[$student['reg_number']])) {
             // Check if data matches
             $existing = $existingLookup[$student['reg_number']];
             if ($existing['email'] === $email && $existing['full_name'] === $full_name) {
+                logDetailedStep("✅ Student {$student['reg_number']} data is current - skipping");
                 $skipped++;
                 continue; // Data is correct, skip
             } else {
+                logDetailedStep("🔄 Updating student {$student['reg_number']} with new data");
+                
                 // Update existing record
                 $updateStmt = $cbt->prepare("
                     UPDATE users SET 
@@ -355,10 +459,17 @@ function migrateStudents() {
                     'full_name' => $full_name,
                     'reg_number' => $student['reg_number']
                 ]);
+                
+                logDetailedStep("✅ Successfully updated student {$student['reg_number']}");
                 $updated++;
             }
         } else {
-            // Insert new record
+            logDetailedStep("🆕 Creating new student user {$student['reg_number']}");
+            logDetailedStep("🔐 Hashing password for security (converting from plain text)");
+            
+            // Insert new record with hashed password
+            $hashedPassword = password_hash($student['gen_password'], PASSWORD_DEFAULT);
+            
             $insertStmt = $cbt->prepare("
                 INSERT INTO users (
                     username, email, reg_number, password, role, full_name, 
@@ -373,12 +484,16 @@ function migrateStudents() {
                 'username' => $username,
                 'email' => $email,
                 'reg_number' => $student['reg_number'],
-                'password' => password_hash($student['gen_password'], PASSWORD_DEFAULT),
+                'password' => $hashedPassword,
                 'full_name' => $full_name
             ]);
+            
+            logDetailedStep("✅ Successfully created student {$student['reg_number']} with hashed password");
             $inserted++;
         }
     }
+    
+    logDetailedStep("🎉 Student synchronization complete!");
     
     return [
         'success' => true,
@@ -386,7 +501,12 @@ function migrateStudents() {
         'inserted' => $inserted,
         'updated' => $updated,
         'skipped' => $skipped,
-        'message' => "Student sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped"
+        'message' => "Student sync complete: {$inserted} inserted, {$updated} updated, {$skipped} skipped",
+        'details' => [
+            'total_processed' => count($sfgsStudents),
+            'passwords_hashed' => $inserted,
+            'security_note' => 'All passwords converted from plain text to secure hash'
+        ]
     ];
 }
 
