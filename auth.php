@@ -1,10 +1,14 @@
+
 <?php
 /**
  * Secure Authentication System
  * Handles login, session management, and auto-logout functionality
  */
 
-session_start();
+// Start session only if not already started
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Master password
 define('MASTER_PASSWORD', 'SUREFOUNDATIONGROUPOFSCHOOL2025');
