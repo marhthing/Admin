@@ -424,6 +424,10 @@ $sessionInfo = getSessionInfo();
             display: none;
         }
 
+        .results-cards.has-results {
+            display: block;
+        }
+
         .result-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -603,7 +607,7 @@ $sessionInfo = getSessionInfo();
                 display: none !important;
             }
 
-            .results-cards {
+            .results-cards.has-results {
                 display: block !important;
             }
 
@@ -960,14 +964,14 @@ $sessionInfo = getSessionInfo();
 
                 if (data.results.length === 0) {
                     resultsTable.style.display = 'none';
-                    resultsCards.style.display = 'none';
+                    resultsCards.classList.remove('has-results');
                     emptyState.style.display = 'block';
                     return;
                 }
 
-                // Remove inline display styles to let CSS media queries handle it
+                // Add class to show cards on mobile, remove inline styles for table
                 resultsTable.style.display = '';
-                resultsCards.style.display = '';
+                resultsCards.classList.add('has-results');
                 emptyState.style.display = 'none';
 
                 // Populate table for desktop
