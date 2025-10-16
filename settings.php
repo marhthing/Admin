@@ -1,4 +1,3 @@
-
 <?php
 require_once 'auth.php';
 require_once 'db.php';
@@ -258,94 +257,6 @@ $sessionInfo = getSessionInfo();
             color: var(--text-muted);
             font-size: 0.75rem;
             text-align: center;
-        }
-
-        .data-mapping-section {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            margin-bottom: 1.5rem;
-        }
-
-        .data-mapping-section h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            letter-spacing: -0.025em;
-        }
-
-        .mapping-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-        }
-
-        .mapping-item {
-            display: grid;
-            grid-template-columns: 2fr auto 2fr 1.5fr;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.625rem;
-            background: var(--background);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border);
-        }
-
-        .mapping-source, .mapping-target {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .mapping-arrow {
-            color: var(--primary);
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .mapping-note {
-            color: var(--text-muted);
-            font-size: 0.75rem;
-        }
-
-        .migration-controls {
-            background: var(--surface-color);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-        }
-
-        .migrate-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.875rem 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .migrate-btn:hover:not(:disabled) {
-            background: var(--primary-hover);
-            box-shadow: var(--shadow-md);
-        }
-
-        .migrate-btn:disabled {
-            background: var(--secondary);
-            cursor: not-allowed;
-            opacity: 0.7;
         }
 
         .status-section {
@@ -628,54 +539,6 @@ $sessionInfo = getSessionInfo();
                 </div>
             </div>
 
-            <div class="data-mapping-section">
-                <h3>Data Mapping Overview</h3>
-                <div class="mapping-grid">
-                    <div class="mapping-item">
-                        <div class="mapping-source">sfgs.users</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.users</div>
-                        <div class="mapping-note">Admin accounts</div>
-                    </div>
-                    <div class="mapping-item">
-                        <div class="mapping-source">sfgs.teachers</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.users</div>
-                        <div class="mapping-note">Teacher accounts</div>
-                    </div>
-                    <div class="mapping-item">
-                        <div class="mapping-source">sfgs.students</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.users</div>
-                        <div class="mapping-note">Student accounts</div>
-                    </div>
-                    <div class="mapping-item">
-                        <div class="mapping-source">sfgs.classes</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.class_levels</div>
-                        <div class="mapping-note">Class structure</div>
-                    </div>
-                    <div class="mapping-item">
-                        <div class="mapping-source">sfgs.sessions</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.sessions</div>
-                        <div class="mapping-note">Academic sessions</div>
-                    </div>
-                    <div class="mapping-item">
-                        <div class="mapping-source">Standard terms</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.terms</div>
-                        <div class="mapping-note">Term structure</div>
-                    </div>
-                    <div class="mapping-item">
-                        <div class="mapping-source">sfgs.jss + sfgs.sss</div>
-                        <div class="mapping-arrow">→</div>
-                        <div class="mapping-target">cbt.subjects</div>
-                        <div class="mapping-note">Subjects (deduplicated)</div>
-                    </div>
-                </div>
-            </div>
-
             <div class="status-section">
                 <h3>Migration Status & Detailed Logs</h3>
 
@@ -746,7 +609,7 @@ $sessionInfo = getSessionInfo();
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000; min-width: 300px; padding: 1rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); animation: slideIn 0.3s ease;';
-            
+
             if (type === 'success') {
                 notification.style.background = '#dcfce7';
                 notification.style.color = '#166534';
@@ -760,10 +623,10 @@ $sessionInfo = getSessionInfo();
                 notification.style.color = '#1e40af';
                 notification.style.border = '1px solid #bfdbfe';
             }
-            
+
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
