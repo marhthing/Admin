@@ -9,6 +9,7 @@ header('Content-Type: application/json');
 
 try {
     // Get filter parameters and trim whitespace
+    $search_filter = trim($_GET['search'] ?? '');
     $class_filter = trim($_GET['class'] ?? '');
     $term_filter = trim($_GET['term'] ?? '');
     $session_filter = trim($_GET['session'] ?? '');
@@ -20,6 +21,12 @@ try {
     // Build dynamic query with filters
     $whereConditions = [];
     $params = [];
+
+    if (!empty($search_filter)) {
+        $whereConditions[] = "(u.full_name LIKE ? OR u.reg_number LIKE ?)";
+        $params[] = '%' . $search_filter . '%';
+        $params[] = '%' . $search_filter . '%';
+    }
 
     if (!empty($class_filter)) {
         $whereConditions[] = "tc.class_level = ?";

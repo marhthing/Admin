@@ -579,6 +579,11 @@ $sessionInfo = getSessionInfo();
             <div class="filters-section">
                 <h3 style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Filter Results</h3>
                 <form method="GET" action="results.php" id="filterForm" onsubmit="event.preventDefault(); applyFiltersWithoutReload();">
+                    <div class="filter-group" style="margin-bottom: 1rem;">
+                        <label for="search">Search by Name or Registration Number</label>
+                        <input type="text" name="search" id="search" placeholder="Enter student name or reg number..." 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; font-size: 0.875rem;">
+                    </div>
                     <div class="filters-grid">
                         <div class="filter-group">
                             <label for="class">Class</label>
@@ -712,6 +717,11 @@ $sessionInfo = getSessionInfo();
                 <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Select filters to export specific results</p>
                 
                 <form id="exportForm">
+                    <div class="filter-group" style="margin-bottom: 1rem;">
+                        <label for="export_search">Search by Name or Registration Number</label>
+                        <input type="text" name="search" id="export_search" placeholder="Enter student name or reg number..." 
+                               style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 0.375rem; font-size: 0.875rem;">
+                    </div>
                     <div class="filters-grid" style="margin-bottom: 1.5rem;">
                         <div class="filter-group">
                             <label for="export_class">Class</label>
@@ -1041,6 +1051,7 @@ $sessionInfo = getSessionInfo();
 
         // Export results to CSV
         function exportResults(format) {
+            const searchValue = document.getElementById('export_search').value;
             const classValue = document.getElementById('export_class').value;
             const termValue = document.getElementById('export_term').value;
             const sessionValue = document.getElementById('export_session').value;
@@ -1050,6 +1061,7 @@ $sessionInfo = getSessionInfo();
             // Build query string
             const params = new URLSearchParams();
             params.set('format', format);
+            if (searchValue) params.set('search', searchValue);
             if (classValue) params.set('class', classValue);
             if (termValue) params.set('term', termValue);
             if (sessionValue) params.set('session', sessionValue);
@@ -1065,6 +1077,7 @@ $sessionInfo = getSessionInfo();
 
         // Print to PDF using browser's print functionality
         function printToPDF() {
+            const searchValue = document.getElementById('export_search').value;
             const classValue = document.getElementById('export_class').value;
             const termValue = document.getElementById('export_term').value;
             const sessionValue = document.getElementById('export_session').value;
@@ -1073,6 +1086,7 @@ $sessionInfo = getSessionInfo();
 
             // Build query string
             const params = new URLSearchParams();
+            if (searchValue) params.set('search', searchValue);
             if (classValue) params.set('class', classValue);
             if (termValue) params.set('term', termValue);
             if (sessionValue) params.set('session', sessionValue);
@@ -1104,6 +1118,7 @@ $sessionInfo = getSessionInfo();
 
         // Apply filters without page reload
         function applyFiltersWithoutReload() {
+            const searchValue = document.getElementById('search').value;
             const classValue = document.getElementById('class').value;
             const termValue = document.getElementById('term').value;
             const sessionValue = document.getElementById('session').value;
@@ -1112,6 +1127,7 @@ $sessionInfo = getSessionInfo();
 
             // Build query string
             const params = new URLSearchParams();
+            if (searchValue) params.set('search', searchValue);
             if (classValue) params.set('class', classValue);
             if (termValue) params.set('term', termValue);
             if (sessionValue) params.set('session', sessionValue);
@@ -1200,7 +1216,14 @@ $sessionInfo = getSessionInfo();
                     assignmentTypeSelect.appendChild(option);
                 });
 
+                // Set search value from URL
+                const searchInput = document.getElementById('search');
+                if (urlParams.get('search')) {
+                    searchInput.value = urlParams.get('search');
+                }
+
                 // Add change event listeners for auto-filtering
+                searchInput.addEventListener('input', scheduleAutoFilter);
                 document.getElementById('class').addEventListener('change', scheduleAutoFilter);
                 document.getElementById('term').addEventListener('change', scheduleAutoFilter);
                 document.getElementById('session').addEventListener('change', scheduleAutoFilter);
