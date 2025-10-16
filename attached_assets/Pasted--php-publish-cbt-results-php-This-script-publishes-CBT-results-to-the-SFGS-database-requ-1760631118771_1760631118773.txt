@@ -1,0 +1,393 @@
+<?php
+// publish_cbt_results.php
+// This script publishes CBT results to the SFGS database
+
+require_once 'config.php'; // Your database connections
+
+// Database connections
+// $cbt_connection = mysqli_connect(...) for if0_39795047_cbt
+// $sfgs_connection = mysqli_connect(...) for if0_39795047_sfgs
+
+/**
+ * Publish a single student's CBT result to SFGS
+ * @param int $test_result_id - The ID from test_results table
+ * @return array - Status and message
+ */
+function publishCBTResult($test_result_id, $cbt_connection, $sfgs_connection) {
+    $errors = [];
+    $success = false;
+    
+    // Step 1: Get test result details with test code and student info
+    $query = "SELECT 
+                tr.id as result_id,
+                tr.score,
+                tr.total_questions,
+                tc.test_type,
+                tc.subject_id,
+                tc.class_level,
+                tc.term_id,
+                tc.session_id,
+                u.reg_number,
+                u.full_name,
+                s.name as subject_name,
+                t.name as term_name,
+                ses.name as session_name
+              FROM test_results tr
+              JOIN test_codes tc ON tr.test_code_id = tc.id
+              JOIN users u ON tr.student_id = u.id
+              JOIN subjects s ON tc.subject_id = s.id
+              JOIN terms t ON tc.term_id = t.id
+              JOIN sessions ses ON tc.session_id = ses.id
+              WHERE tr.id = ?";
+    
+    $stmt = mysqli_prepare($cbt_connection, $query);
+    mysqli_stmt_bind_param($stmt, "i", $test_result_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    
+    if (mysqli_num_rows($result) === 0) {
+        return ['success' => false, 'message' => 'Test result not found'];
+    }
+    
+    $test_data = mysqli_fetch_assoc($result);
+    
+    // Step 2: Verify student exists in SFGS students table
+    $student_check = "SELECT id FROM students WHERE reg_number = ?";
+    $stmt = mysqli_prepare($sfgs_connection, $student_check);
+    mysqli_stmt_bind_param($stmt, "s", $test_data['reg_number']);
+    mysqli_stmt_execute($stmt);
+    $student_result = mysqli_stmt_get_result($stmt);
+    
+    if (mysqli_num_rows($student_result) === 0) {
+        return ['success' => false, 'message' => 'Student not found in SFGS database'];
+    }
+    
+    // Step 3: Verify student registered for this subject
+    $subject_check = "SELECT id FROM subjects 
+                      WHERE reg_number = ? 
+                      AND class = ? 
+                      AND term = ? 
+                      AND session = ? 
+                      AND subjects = ?";
+    
+    $stmt = mysqli_prepare($sfgs_connection, $subject_check);
+    mysqli_stmt_bind_param($stmt, "sssss", 
+        $test_data['reg_number'],
+        $test_data['class_level'],
+        $test_data['term_name'],
+        $test_data['session_name'],
+        $test_data['subject_name']
+    );
+    mysqli_stmt_execute($stmt);
+    $subject_result = mysqli_stmt_get_result($stmt);
+    
+    if (mysqli_num_rows($subject_result) === 0) {
+        return ['success' => false, 'message' => 'Student not registered for this subject'];
+    }
+    
+    // Step 4: Check if result already exists
+    $result_check = "SELECT * FROM results1 
+                     WHERE reg_number = ? 
+                     AND class = ? 
+                     AND term = ? 
+                     AND session = ? 
+                     AND subjects = ?";
+    
+    $stmt = mysqli_prepare($sfgs_connection, $result_check);
+    mysqli_stmt_bind_param($stmt, "sssss",
+        $test_data['reg_number'],
+        $test_data['class_level'],
+        $test_data['term_name'],
+        $test_data['session_name'],
+        $test_data['subject_name']
+    );
+    mysqli_stmt_execute($stmt);
+    $existing_result = mysqli_stmt_get_result($stmt);
+    
+    // Step 5: Map test_type to appropriate fields
+    $test_type = $test_data['test_type'];
+    $score = $test_data['score'];
+    $current_date = date('Y-m-d');
+    $current_time = date('H:i:s');
+    
+    mysqli_begin_transaction($sfgs_connection);
+    
+    try {
+        if (mysqli_num_rows($existing_result) > 0) {
+            // UPDATE existing record
+            $existing = mysqli_fetch_assoc($existing_result);
+            $existing_id = $existing['id'];
+            
+            if ($test_type === 'First CA') {
+                $update_query = "UPDATE results1 
+                                SET ca = ?, 
+                                    subject_total = ? + COALESCE(ca2, 0) + COALESCE(exam, 0),
+                                    date_of_upload = ?,
+                                    time_of_upload = ?
+                                WHERE id = ?";
+                $stmt = mysqli_prepare($sfgs_connection, $update_query);
+                mysqli_stmt_bind_param($stmt, "iissi", $score, $score, $current_date, $current_time, $existing_id);
+                
+            } elseif ($test_type === 'Second CA') {
+                $update_query = "UPDATE results1 
+                                SET ca2 = ?, 
+                                    subject_total = COALESCE(ca, 0) + ? + COALESCE(exam, 0),
+                                    date_of_upload = ?,
+                                    time_of_upload = ?
+                                WHERE id = ?";
+                $stmt = mysqli_prepare($sfgs_connection, $update_query);
+                mysqli_stmt_bind_param($stmt, "iissi", $score, $score, $current_date, $current_time, $existing_id);
+                
+            } elseif ($test_type === 'Examination') {
+                $update_query = "UPDATE results1 
+                                SET exam = ?, 
+                                    subject_total = COALESCE(ca, 0) + COALESCE(ca2, 0) + ?,
+                                    date_of_upload = ?,
+                                    time_of_upload = ?
+                                WHERE id = ?";
+                $stmt = mysqli_prepare($sfgs_connection, $update_query);
+                mysqli_stmt_bind_param($stmt, "iissi", $score, $score, $current_date, $current_time, $existing_id);
+            }
+            
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception('Failed to update result: ' . mysqli_error($sfgs_connection));
+            }
+            
+            $message = 'Result updated successfully';
+            
+        } else {
+            // INSERT new record
+            $ca = ($test_type === 'First CA') ? $score : 0;
+            $ca2 = ($test_type === 'Second CA') ? $score : 0;
+            $exam = ($test_type === 'Examination') ? $score : 0;
+            $subject_total = $ca + $ca2 + $exam;
+            
+            $insert_query = "INSERT INTO results1 
+                            (class, term, session, reg_number, name, subjects, 
+                             ca, ca2, exam, subject_total, date_of_upload, time_of_upload, published) 
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)";
+            
+            $stmt = mysqli_prepare($sfgs_connection, $insert_query);
+            mysqli_stmt_bind_param($stmt, "ssssssiiisss",
+                $test_data['class_level'],
+                $test_data['term_name'],
+                $test_data['session_name'],
+                $test_data['reg_number'],
+                $test_data['full_name'],
+                $test_data['subject_name'],
+                $ca,
+                $ca2,
+                $exam,
+                $subject_total,
+                $current_date,
+                $current_time
+            );
+            
+            if (!mysqli_stmt_execute($stmt)) {
+                throw new Exception('Failed to insert result: ' . mysqli_error($sfgs_connection));
+            }
+            
+            $message = 'Result inserted successfully';
+        }
+        
+        mysqli_commit($sfgs_connection);
+        $success = true;
+        
+    } catch (Exception $e) {
+        mysqli_rollback($sfgs_connection);
+        return ['success' => false, 'message' => $e->getMessage()];
+    }
+    
+    return [
+        'success' => $success, 
+        'message' => $message,
+        'data' => [
+            'reg_number' => $test_data['reg_number'],
+            'subject' => $test_data['subject_name'],
+            'class' => $test_data['class_level'],
+            'term' => $test_data['term_name'],
+            'session' => $test_data['session_name'],
+            'test_type' => $test_type,
+            'score' => $score
+        ]
+    ];
+}
+
+/**
+ * Rank students for a specific class, term, session, and subject
+ * @param string $class
+ * @param string $term
+ * @param string $session
+ * @param string $subject
+ * @return bool
+ */
+function rankStudents($class, $term, $session, $subject, $sfgs_connection) {
+    mysqli_query($sfgs_connection, "SET SQL_BIG_SELECTS=1");
+    
+    if ($term === 'Third Term') {
+        // Third Term: Weighted ranking
+        $rank_query = "SELECT r.id, r.ca, r.exam,
+                              COALESCE(ft.subject_total, 0) AS first_total,
+                              COALESCE(st.subject_total, 0) AS second_total
+                       FROM results1 r
+                       LEFT JOIN results1 ft ON ft.reg_number = r.reg_number 
+                            AND ft.class = r.class 
+                            AND ft.session = r.session 
+                            AND ft.subjects = r.subjects 
+                            AND ft.term = 'First Term'
+                       LEFT JOIN results1 st ON st.reg_number = r.reg_number 
+                            AND st.class = r.class 
+                            AND st.session = r.session 
+                            AND st.subjects = r.subjects 
+                            AND st.term = 'Second Term'
+                       WHERE r.class = ? 
+                       AND r.term = ? 
+                       AND r.session = ? 
+                       AND r.subjects = ?";
+        
+        $stmt = mysqli_prepare($sfgs_connection, $rank_query);
+        mysqli_stmt_bind_param($stmt, "ssss", $class, $term, $session, $subject);
+        mysqli_stmt_execute($stmt);
+        $rank_result = mysqli_stmt_get_result($stmt);
+        
+        if (!$rank_result) {
+            return false;
+        }
+        
+        $ranking_data = [];
+        while ($row = mysqli_fetch_assoc($rank_result)) {
+            $weighted_total = round($row['first_total'] * 0.2) + 
+                            round($row['second_total'] * 0.2) +
+                            (int)$row['ca'] + (int)$row['exam'];
+            $ranking_data[] = ['id' => $row['id'], 'total' => $weighted_total];
+        }
+        
+        usort($ranking_data, fn($a, $b) => $b['total'] - $a['total']);
+        
+        $rank = 1;
+        $prev_score = null;
+        $same_rank = 0;
+        
+        foreach ($ranking_data as $entry) {
+            if ($prev_score !== null && $entry['total'] === $prev_score) {
+                $same_rank++;
+            } else {
+                $rank += $same_rank;
+                $same_rank = 1;
+            }
+            $prev_score = $entry['total'];
+            
+            $update = "UPDATE results1 SET subject_rank = ? WHERE id = ?";
+            $stmt = mysqli_prepare($sfgs_connection, $update);
+            mysqli_stmt_bind_param($stmt, "ii", $rank, $entry['id']);
+            mysqli_stmt_execute($stmt);
+        }
+        
+    } else {
+        // First and Second Term: Simple ranking by subject_total
+        $rank_query = "SELECT id, subject_total 
+                       FROM results1 
+                       WHERE class = ? 
+                       AND term = ? 
+                       AND session = ? 
+                       AND subjects = ? 
+                       ORDER BY subject_total DESC";
+        
+        $stmt = mysqli_prepare($sfgs_connection, $rank_query);
+        mysqli_stmt_bind_param($stmt, "ssss", $class, $term, $session, $subject);
+        mysqli_stmt_execute($stmt);
+        $rank_result = mysqli_stmt_get_result($stmt);
+        
+        if (!$rank_result) {
+            return false;
+        }
+        
+        $rank = 1;
+        $prev_score = null;
+        $same_rank = 0;
+        
+        while ($row = mysqli_fetch_assoc($rank_result)) {
+            if ($prev_score !== null && $row['subject_total'] == $prev_score) {
+                $same_rank++;
+            } else {
+                $rank += $same_rank;
+                $same_rank = 1;
+            }
+            $prev_score = $row['subject_total'];
+            
+            $update = "UPDATE results1 SET subject_rank = ? WHERE id = ?";
+            $stmt = mysqli_prepare($sfgs_connection, $update);
+            mysqli_stmt_bind_param($stmt, "ii", $rank, $row['id']);
+            mysqli_stmt_execute($stmt);
+        }
+    }
+    
+    return true;
+}
+
+/**
+ * Publish results for all students who completed a specific test code
+ * @param int $test_code_id
+ * @return array
+ */
+function publishTestCodeResults($test_code_id, $cbt_connection, $sfgs_connection) {
+    // Get all test results for this test code
+    $query = "SELECT id FROM test_results WHERE test_code_id = ?";
+    $stmt = mysqli_prepare($cbt_connection, $query);
+    mysqli_stmt_bind_param($stmt, "i", $test_code_id);
+    mysqli_stmt_execute($stmt);
+    $results = mysqli_stmt_get_result($stmt);
+    
+    $published = [];
+    $failed = [];
+    
+    while ($row = mysqli_fetch_assoc($results)) {
+        $result = publishCBTResult($row['id'], $cbt_connection, $sfgs_connection);
+        
+        if ($result['success']) {
+            $published[] = $result['data'];
+        } else {
+            $failed[] = [
+                'result_id' => $row['id'],
+                'error' => $result['message']
+            ];
+        }
+    }
+    
+    // Get test code details for ranking
+    if (!empty($published)) {
+        $first = $published[0];
+        rankStudents(
+            $first['class'], 
+            $first['term'], 
+            $first['session'], 
+            $first['subject'], 
+            $sfgs_connection
+        );
+    }
+    
+    return [
+        'published_count' => count($published),
+        'failed_count' => count($failed),
+        'published' => $published,
+        'failed' => $failed
+    ];
+}
+
+// Example usage:
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $test_result_id = $_POST['test_result_id'] ?? null;
+    $test_code_id = $_POST['test_code_id'] ?? null;
+    
+    if ($test_result_id) {
+        // Publish single student result
+        $result = publishCBTResult($test_result_id, $cbt_connection, $sfgs_connection);
+        echo json_encode($result);
+        
+    } elseif ($test_code_id) {
+        // Publish all results for a test code
+        $result = publishTestCodeResults($test_code_id, $cbt_connection, $sfgs_connection);
+        echo json_encode($result);
+    }
+}
+?>
