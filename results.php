@@ -503,17 +503,25 @@ $sessionInfo = getSessionInfo();
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.show {
+            display: flex;
         }
 
         .modal-content {
             background-color: var(--surface);
-            margin: 15% auto;
             padding: 2rem;
             border-radius: 0.75rem;
             width: 90%;
             max-width: 400px;
             box-shadow: var(--shadow-lg);
             animation: modalSlideIn 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         @keyframes modalSlideIn {
@@ -612,13 +620,17 @@ $sessionInfo = getSessionInfo();
             }
 
             .modal-content {
-                margin: 25% auto;
                 width: 95%;
                 padding: 1.5rem;
+                max-height: 85vh;
             }
 
             .modal-actions {
                 flex-direction: column-reverse;
+            }
+
+            .modal-actions .btn {
+                width: 100%;
             }
         }
 
@@ -1066,13 +1078,13 @@ $sessionInfo = getSessionInfo();
             deleteResultId = resultId;
             document.getElementById('deleteStudentName').textContent = studentName;
             document.getElementById('deleteSubject').textContent = subject;
-            document.getElementById('deleteModal').style.display = 'block';
+            document.getElementById('deleteModal').classList.add('show');
         }
 
         // Close delete modal
         function closeDeleteModal() {
             deleteResultId = null;
-            document.getElementById('deleteModal').style.display = 'none';
+            document.getElementById('deleteModal').classList.remove('show');
         }
 
         // Confirm delete
@@ -1117,13 +1129,13 @@ $sessionInfo = getSessionInfo();
 
         // Show export modal
         function showExportModal() {
-            document.getElementById('exportModal').style.display = 'block';
+            document.getElementById('exportModal').classList.add('show');
             loadExportFilterOptions();
         }
 
         // Close export modal
         function closeExportModal() {
-            document.getElementById('exportModal').style.display = 'none';
+            document.getElementById('exportModal').classList.remove('show');
         }
 
         // Load filter options for export modal
