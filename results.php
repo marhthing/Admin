@@ -965,7 +965,9 @@ $sessionInfo = getSessionInfo();
                     return;
                 }
 
-                resultsTable.style.display = 'table';
+                // Remove inline display styles to let CSS media queries handle it
+                resultsTable.style.display = '';
+                resultsCards.style.display = '';
                 emptyState.style.display = 'none';
 
                 // Populate table for desktop
