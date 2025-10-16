@@ -421,11 +421,7 @@ $sessionInfo = getSessionInfo();
 
         /* Mobile Cards View */
         .results-cards {
-            display: none;
-        }
-
-        .results-cards.has-results {
-            display: block;
+            display: none !important;
         }
 
         .result-card {
@@ -615,7 +611,7 @@ $sessionInfo = getSessionInfo();
                 display: none !important;
             }
 
-            .results-cards.has-results {
+            .results-cards {
                 display: block !important;
             }
 
