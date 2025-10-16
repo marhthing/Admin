@@ -21,17 +21,41 @@ if (isset($_POST['ajax_backup'])) {
     $backup_sql = "";
     
     try {
+        // Header with restoration instructions
+        $backup_sql .= "-- ========================================================================\n";
+        $backup_sql .= "-- SFGS + CBT Database Backup\n";
+        $backup_sql .= "-- Generated: " . date("Y-m-d H:i:s") . "\n";
+        $backup_sql .= "-- ========================================================================\n";
+        $backup_sql .= "-- \n";
+        $backup_sql .= "-- RESTORATION INSTRUCTIONS:\n";
+        $backup_sql .= "-- 1. Create two databases on your MySQL server:\n";
+        $backup_sql .= "--    - if0_39795047_sfgs (or rename to your preferred name)\n";
+        $backup_sql .= "--    - if0_39795047_cbt (or rename to your preferred name)\n";
+        $backup_sql .= "-- \n";
+        $backup_sql .= "-- 2. If you want to use different database names, replace:\n";
+        $backup_sql .= "--    'if0_39795047_sfgs' with your SFGS database name\n";
+        $backup_sql .= "--    'if0_39795047_cbt' with your CBT database name\n";
+        $backup_sql .= "-- \n";
+        $backup_sql .= "-- 3. Import this file:\n";
+        $backup_sql .= "--    - Via phpMyAdmin: Import > Choose this file > Go\n";
+        $backup_sql .= "--    - Via command line: mysql -u username -p < backup-file.sql\n";
+        $backup_sql .= "-- \n";
+        $backup_sql .= "-- ========================================================================\n\n";
+        
         // Backup SFGS Database
         $sfgs = createConnection('sfgs');
-        $backup_sql .= "-- ====================================\n";
-        $backup_sql .= "-- SFGS Database Backup\n";
-        $backup_sql .= "-- Date: " . date("Y-m-d H:i:s") . "\n";
-        $backup_sql .= "-- ====================================\n\n";
-        $backup_sql .= "USE if0_39795047_sfgs;\n\n";
+        $backup_sql .= "-- ========================================================================\n";
+        $backup_sql .= "-- SECTION 1: SFGS DATABASE\n";
+        $backup_sql .= "-- ========================================================================\n\n";
+        $backup_sql .= "-- Create database if it doesn't exist\n";
+        $backup_sql .= "CREATE DATABASE IF NOT EXISTS `if0_39795047_sfgs` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;\n\n";
+        $backup_sql .= "-- Switch to SFGS database\n";
+        $backup_sql .= "USE `if0_39795047_sfgs`;\n\n";
         
         $tables = $sfgs->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
         
         foreach ($tables as $table) {
+            $backup_sql .= "-- Table: $table\n";
             $backup_sql .= "DROP TABLE IF EXISTS `$table`;\n";
             
             $createTable = $sfgs->query("SHOW CREATE TABLE `$table`")->fetch();
@@ -40,6 +64,7 @@ if (isset($_POST['ajax_backup'])) {
             $rows = $sfgs->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
             
             if (count($rows) > 0) {
+                $backup_sql .= "-- Data for table: $table\n";
                 foreach ($rows as $row) {
                     $backup_sql .= "INSERT INTO `$table` VALUES(";
                     $values = [];
@@ -58,15 +83,18 @@ if (isset($_POST['ajax_backup'])) {
         
         // Backup CBT Database
         $cbt = createConnection('cbt');
-        $backup_sql .= "-- ====================================\n";
-        $backup_sql .= "-- CBT Database Backup\n";
-        $backup_sql .= "-- Date: " . date("Y-m-d H:i:s") . "\n";
-        $backup_sql .= "-- ====================================\n\n";
-        $backup_sql .= "USE if0_39795047_cbt;\n\n";
+        $backup_sql .= "-- ========================================================================\n";
+        $backup_sql .= "-- SECTION 2: CBT DATABASE\n";
+        $backup_sql .= "-- ========================================================================\n\n";
+        $backup_sql .= "-- Create database if it doesn't exist\n";
+        $backup_sql .= "CREATE DATABASE IF NOT EXISTS `if0_39795047_cbt` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;\n\n";
+        $backup_sql .= "-- Switch to CBT database\n";
+        $backup_sql .= "USE `if0_39795047_cbt`;\n\n";
         
         $tables = $cbt->query("SHOW TABLES")->fetchAll(PDO::FETCH_COLUMN);
         
         foreach ($tables as $table) {
+            $backup_sql .= "-- Table: $table\n";
             $backup_sql .= "DROP TABLE IF EXISTS `$table`;\n";
             
             $createTable = $cbt->query("SHOW CREATE TABLE `$table`")->fetch();
@@ -75,6 +103,7 @@ if (isset($_POST['ajax_backup'])) {
             $rows = $cbt->query("SELECT * FROM `$table`")->fetchAll(PDO::FETCH_ASSOC);
             
             if (count($rows) > 0) {
+                $backup_sql .= "-- Data for table: $table\n";
                 foreach ($rows as $row) {
                     $backup_sql .= "INSERT INTO `$table` VALUES(";
                     $values = [];
@@ -90,6 +119,10 @@ if (isset($_POST['ajax_backup'])) {
             }
             $backup_sql .= "\n\n";
         }
+        
+        $backup_sql .= "-- ========================================================================\n";
+        $backup_sql .= "-- BACKUP COMPLETED SUCCESSFULLY\n";
+        $backup_sql .= "-- ========================================================================\n";
         
         if (file_put_contents($backup_file, $backup_sql)) {
             echo json_encode([
