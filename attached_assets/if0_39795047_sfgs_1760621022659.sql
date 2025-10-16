@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: sql100.byetcluster.com
--- Generation Time: Aug 28, 2025 at 08:23 AM
+-- Generation Time: Oct 16, 2025 at 09:16 AM
 -- Server version: 10.6.22-MariaDB
 -- PHP Version: 7.2.22
 
@@ -57,7 +57,12 @@ CREATE TABLE `administratives` (
 -- Table structure for table `classes`
 --
 
- 
+CREATE TABLE `classes` (
+  `id` int(10) NOT NULL,
+  `classes` varchar(50) DEFAULT NULL,
+  `date_added` varchar(50) DEFAULT NULL,
+  `time_added` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
