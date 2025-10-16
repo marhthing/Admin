@@ -388,6 +388,14 @@ $sessionInfo = getSessionInfo();
             padding: 1rem;
             border-radius: var(--radius-sm);
             border: 1px solid var(--border);
+            position: relative;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-container canvas {
+            max-height: 250px;
         }
 
         .export-actions {
@@ -420,6 +428,14 @@ $sessionInfo = getSessionInfo();
 
             .charts-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+
+            .chart-container canvas {
+                max-height: 200px;
             }
         }
     </style>
@@ -677,12 +693,36 @@ $sessionInfo = getSessionInfo();
                     datasets: [{
                         label: label,
                         data: data,
-                        backgroundColor: type === 'pie' ? ['#6366f1', '#ef4444', '#10b981'] : '#6366f1'
+                        backgroundColor: type === 'pie' ? ['#6366f1', '#ef4444', '#10b981'] : '#6366f1',
+                        borderColor: type === 'line' ? '#6366f1' : undefined,
+                        borderWidth: type === 'line' ? 2 : 1,
+                        fill: type === 'line' ? false : undefined
                     }]
                 },
                 options: { 
                     responsive: true,
-                    maintainAspectRatio: true
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: type === 'pie',
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 12,
+                                padding: 10,
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        }
+                    },
+                    scales: type !== 'pie' ? {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    } : {}
                 }
             });
         }
