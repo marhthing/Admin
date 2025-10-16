@@ -609,7 +609,7 @@ $sessionInfo = getSessionInfo();
 
             <div class="filters-section">
                 <h3 style="margin-bottom: 1rem; font-size: 1.125rem; font-weight: 600;">Filter Results</h3>
-                <form method="GET" action="results.php">
+                <form method="GET" action="results.php" id="filterForm" onsubmit="event.preventDefault(); applyFiltersWithoutReload();">
                     <div class="filters-grid">
                         <div class="filter-group">
                             <label for="class">Class</label>
@@ -891,6 +891,46 @@ $sessionInfo = getSessionInfo();
             }
         }
 
+        // Debounce timer for auto-filtering
+        let filterDebounceTimer = null;
+
+        // Auto-apply filters after 2 seconds of inactivity
+        function scheduleAutoFilter() {
+            // Clear existing timer
+            if (filterDebounceTimer) {
+                clearTimeout(filterDebounceTimer);
+            }
+
+            // Set new timer for 2 seconds
+            filterDebounceTimer = setTimeout(() => {
+                applyFiltersWithoutReload();
+            }, 2000);
+        }
+
+        // Apply filters without page reload
+        function applyFiltersWithoutReload() {
+            const classValue = document.getElementById('class').value;
+            const termValue = document.getElementById('term').value;
+            const sessionValue = document.getElementById('session').value;
+            const subjectValue = document.getElementById('subject').value;
+            const assignmentTypeValue = document.getElementById('assignment_type').value;
+
+            // Build query string
+            const params = new URLSearchParams();
+            if (classValue) params.set('class', classValue);
+            if (termValue) params.set('term', termValue);
+            if (sessionValue) params.set('session', sessionValue);
+            if (subjectValue) params.set('subject', subjectValue);
+            if (assignmentTypeValue) params.set('assignment_type', assignmentTypeValue);
+
+            // Update URL without reload
+            const newUrl = params.toString() ? `?${params.toString()}` : 'results.php';
+            window.history.pushState({}, '', newUrl);
+
+            // Reload results
+            loadResults();
+        }
+
         // Load filter options from database
         async function loadFilterOptions() {
             try {
@@ -964,6 +1004,13 @@ $sessionInfo = getSessionInfo();
                     }
                     assignmentTypeSelect.appendChild(option);
                 });
+
+                // Add change event listeners for auto-filtering
+                document.getElementById('class').addEventListener('change', scheduleAutoFilter);
+                document.getElementById('term').addEventListener('change', scheduleAutoFilter);
+                document.getElementById('session').addEventListener('change', scheduleAutoFilter);
+                document.getElementById('subject').addEventListener('change', scheduleAutoFilter);
+                document.getElementById('assignment_type').addEventListener('change', scheduleAutoFilter);
 
             } catch (error) {
                 console.error('Error loading filter options:', error);
