@@ -16,7 +16,7 @@ $query = "SELECT login_logs.*,
                      WHEN login_logs.role = 'teacher' THEN teachers.fullname
                      WHEN login_logs.role = 'student' THEN CONCAT(students.firstname, ' ', students.lastname)  
                  END AS username,
-                 IF(login_logs.status = 1, 'Success', 'Failed') AS login_status
+                 IF(login_logs.status = 'success', 'Success', 'Failed') AS login_status
           FROM login_logs 
           LEFT JOIN users ON login_logs.role = 'admin' AND login_logs.user_id = users.id
           LEFT JOIN teachers ON login_logs.role = 'teacher' AND login_logs.user_id = teachers.id
