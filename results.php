@@ -615,50 +615,35 @@ $sessionInfo = getSessionInfo();
                             <label for="class">Class</label>
                             <select name="class" id="class">
                                 <option value="">All Classes</option>
-                                <option value="JSS1" <?= $class_filter === 'JSS1' ? 'selected' : '' ?>>JSS1</option>
-                                <option value="JSS2" <?= $class_filter === 'JSS2' ? 'selected' : '' ?>>JSS2</option>
-                                <option value="JSS3" <?= $class_filter === 'JSS3' ? 'selected' : '' ?>>JSS3</option>
-                                <option value="SS1" <?= $class_filter === 'SS1' ? 'selected' : '' ?>>SS1</option>
-                                <option value="SS2" <?= $class_filter === 'SS2' ? 'selected' : '' ?>>SS2</option>
-                                <option value="SS3" <?= $class_filter === 'SS3' ? 'selected' : '' ?>>SS3</option>
+                                <!-- Options will be loaded dynamically -->
                             </select>
                         </div>
                         <div class="filter-group">
                             <label for="term">Term</label>
                             <select name="term" id="term">
                                 <option value="">All Terms</option>
-                                <option value="First" <?= $term_filter === 'First' ? 'selected' : '' ?>>First Term</option>
-                                <option value="Second" <?= $term_filter === 'Second' ? 'selected' : '' ?>>Second Term</option>
-                                <option value="Third" <?= $term_filter === 'Third' ? 'selected' : '' ?>>Third Term</option>
+                                <!-- Options will be loaded dynamically -->
                             </select>
                         </div>
                         <div class="filter-group">
                             <label for="session">Session</label>
                             <select name="session" id="session">
                                 <option value="">All Sessions</option>
-                                <option value="2024/2025" <?= $session_filter === '2024/2025' ? 'selected' : '' ?>>2024/2025</option>
-                                <option value="2023/2024" <?= $session_filter === '2023/2024' ? 'selected' : '' ?>>2023/2024</option>
-                                <option value="2022/2023" <?= $session_filter === '2022/2023' ? 'selected' : '' ?>>2022/2023</option>
+                                <!-- Options will be loaded dynamically -->
                             </select>
                         </div>
                         <div class="filter-group">
                             <label for="subject">Subject</label>
                             <select name="subject" id="subject">
                                 <option value="">All Subjects</option>
-                                <option value="Mathematics" <?= $subject_filter === 'Mathematics' ? 'selected' : '' ?>>Mathematics</option>
-                                <option value="English" <?= $subject_filter === 'English' ? 'selected' : '' ?>>English</option>
-                                <option value="Physics" <?= $subject_filter === 'Physics' ? 'selected' : '' ?>>Physics</option>
-                                <option value="Chemistry" <?= $subject_filter === 'Chemistry' ? 'selected' : '' ?>>Chemistry</option>
-                                <option value="Biology" <?= $subject_filter === 'Biology' ? 'selected' : '' ?>>Biology</option>
+                                <!-- Options will be loaded dynamically -->
                             </select>
                         </div>
                         <div class="filter-group">
                             <label for="assignment_type">Assignment Type</label>
                             <select name="assignment_type" id="assignment_type">
                                 <option value="">All Types</option>
-                                <option value="Test" <?= $assignment_type_filter === 'Test' ? 'selected' : '' ?>>Test</option>
-                                <option value="Assignment" <?= $assignment_type_filter === 'Assignment' ? 'selected' : '' ?>>Assignment</option>
-                                <option value="Exam" <?= $assignment_type_filter === 'Exam' ? 'selected' : '' ?>>Exam</option>
+                                <!-- Options will be loaded dynamically -->
                             </select>
                         </div>
                     </div>
@@ -906,9 +891,89 @@ $sessionInfo = getSessionInfo();
             }
         }
 
+        // Load filter options from database
+        async function loadFilterOptions() {
+            try {
+                const response = await fetch('get_filter_options.php');
+                const data = await response.json();
+
+                if (!data.success) {
+                    console.error('Failed to load filter options:', data.message);
+                    return;
+                }
+
+                const filters = data.filters;
+                const urlParams = new URLSearchParams(window.location.search);
+
+                // Populate classes
+                const classSelect = document.getElementById('class');
+                filters.classes.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.name;
+                    option.textContent = cls.display_name || cls.name;
+                    if (urlParams.get('class') === cls.name) {
+                        option.selected = true;
+                    }
+                    classSelect.appendChild(option);
+                });
+
+                // Populate terms
+                const termSelect = document.getElementById('term');
+                filters.terms.forEach(term => {
+                    const option = document.createElement('option');
+                    option.value = term.name;
+                    option.textContent = term.name + ' Term';
+                    if (urlParams.get('term') === term.name) {
+                        option.selected = true;
+                    }
+                    termSelect.appendChild(option);
+                });
+
+                // Populate sessions
+                const sessionSelect = document.getElementById('session');
+                filters.sessions.forEach(session => {
+                    const option = document.createElement('option');
+                    option.value = session.name;
+                    option.textContent = session.name;
+                    if (urlParams.get('session') === session.name) {
+                        option.selected = true;
+                    }
+                    sessionSelect.appendChild(option);
+                });
+
+                // Populate subjects
+                const subjectSelect = document.getElementById('subject');
+                filters.subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.name;
+                    option.textContent = subject.name;
+                    if (urlParams.get('subject') === subject.name) {
+                        option.selected = true;
+                    }
+                    subjectSelect.appendChild(option);
+                });
+
+                // Populate assignment types
+                const assignmentTypeSelect = document.getElementById('assignment_type');
+                filters.assignment_types.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type.test_type;
+                    option.textContent = type.test_type.charAt(0).toUpperCase() + type.test_type.slice(1);
+                    if (urlParams.get('assignment_type') === type.test_type) {
+                        option.selected = true;
+                    }
+                    assignmentTypeSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('Error loading filter options:', error);
+            }
+        }
+
         // Initialize
         window.onload = function() {
             startSessionTimer();
+            loadFilterOptions();
             loadResults();
         };
     </script>
