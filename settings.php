@@ -583,8 +583,7 @@ $sessionInfo = getSessionInfo();
                 <div class="log-container">
                     <div class="log-area" id="logArea">
                         <div style="color: #94a3b8;">Detailed migration logs will appear here...</div>
-                        <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
-                        <div style="color: #fbbf24;">Note: All passwords will be converted from plain text to secure hash.</div>
+                        <div style="color: #94a3b8;">Click "Start Smart Sync" to begin.</div>
                     </div>
                 </div>
             </div>
@@ -898,9 +897,7 @@ $sessionInfo = getSessionInfo();
 
         window.onload = function() {
             startSessionTimer();
-            log('System initialized and ready for secure synchronization.', 'info');
-            log('Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
-            log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
+            log('System initialized and ready.', 'info');
         }
     </script>
 </body>
