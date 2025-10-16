@@ -8,12 +8,12 @@ requireAuth();
 header('Content-Type: application/json');
 
 try {
-    // Get filter parameters
-    $class_filter = $_GET['class'] ?? '';
-    $term_filter = $_GET['term'] ?? '';
-    $session_filter = $_GET['session'] ?? '';
-    $subject_filter = $_GET['subject'] ?? '';
-    $assignment_type_filter = $_GET['assignment_type'] ?? '';
+    // Get filter parameters and trim whitespace
+    $class_filter = trim($_GET['class'] ?? '');
+    $term_filter = trim($_GET['term'] ?? '');
+    $session_filter = trim($_GET['session'] ?? '');
+    $subject_filter = trim($_GET['subject'] ?? '');
+    $assignment_type_filter = trim($_GET['assignment_type'] ?? '');
 
     $cbt = createConnection('cbt');
 
@@ -23,7 +23,7 @@ try {
 
     if (!empty($class_filter)) {
         $whereConditions[] = "tc.class_level = ?";
-        $params[] = $class_filter;
+        $params[] = trim($class_filter);
     }
 
     if (!empty($term_filter)) {
@@ -42,8 +42,8 @@ try {
     }
 
     if (!empty($assignment_type_filter)) {
-        $whereConditions[] = "tc.test_type = ?";
-        $params[] = strtolower($assignment_type_filter);
+        $whereConditions[] = "LOWER(tc.test_type) = LOWER(?)";
+        $params[] = $assignment_type_filter;
     }
 
     $whereClause = '';
