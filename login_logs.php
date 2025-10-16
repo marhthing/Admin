@@ -437,6 +437,14 @@ $sessionInfo = getSessionInfo();
             .chart-container canvas {
                 max-height: 200px;
             }
+
+            /* Hide IP Address and Device Info columns on mobile */
+            .logs-table th:nth-child(3),
+            .logs-table td:nth-child(3),
+            .logs-table th:nth-child(4),
+            .logs-table td:nth-child(4) {
+                display: none;
+            }
         }
     </style>
 </head>
