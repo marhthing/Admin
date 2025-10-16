@@ -443,7 +443,13 @@ $sessionInfo = getSessionInfo();
             .logs-table td:nth-child(3),
             .logs-table th:nth-child(4),
             .logs-table td:nth-child(4) {
-                display: none;
+                display: none !important;
+            }
+            
+            .logs-table th,
+            .logs-table td {
+                font-size: 0.75rem;
+                padding: 0.5rem 0.25rem;
             }
         }
     </style>
