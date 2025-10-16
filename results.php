@@ -1100,20 +1100,9 @@ $sessionInfo = getSessionInfo();
             closeExportModal();
         }
 
-        // Debounce timer for auto-filtering
-        let filterDebounceTimer = null;
-
-        // Auto-apply filters after 2 seconds of inactivity
+        // Auto-apply filters immediately
         function scheduleAutoFilter() {
-            // Clear existing timer
-            if (filterDebounceTimer) {
-                clearTimeout(filterDebounceTimer);
-            }
-
-            // Set new timer for 2 seconds
-            filterDebounceTimer = setTimeout(() => {
-                applyFiltersWithoutReload();
-            }, 2000);
+            applyFiltersWithoutReload();
         }
 
         // Apply filters without page reload
