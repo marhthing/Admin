@@ -893,21 +893,6 @@ $sessionInfo = getSessionInfo();
         /* Mobile navigation improvements */
         @media (max-width: 768px) {
 
-            .session-bar {
-                flex-direction: column;
-                gap: 0.5rem;
-                text-align: center;
-                padding: 0.625rem 0.875rem;
-            }
-
-            .session-info {
-                flex-direction: column;
-                gap: 0.5rem;
-                align-items: center;
-            }
-            }
-
-
             .info-section,
             .migration-controls,
             .status-section {
@@ -980,8 +965,8 @@ $sessionInfo = getSessionInfo();
                     <div class="db-connection" id="sfgs-status">
                         <div class="connection-indicator pending" id="sfgs-indicator"></div>
                         <div class="connection-info">
-                            <strong>SFGS Database</strong>
-                            <span>if0_39795047_sfgs (Source)</span>
+                            <strong>Portal Database</strong>
+                            <!-- <span>Result Portal</span> -->
                             <span class="connection-status" id="sfgs-status-text">Checking...</span>
                         </div>
                     </div>
@@ -989,7 +974,7 @@ $sessionInfo = getSessionInfo();
                         <div class="connection-indicator pending" id="cbt-indicator"></div>
                         <div class="connection-info">
                             <strong>CBT Database</strong>
-                            <span>if0_39795047_cbt (Target)</span>
+                            <!-- <span>CBT portal</span> -->
                             <span class="connection-status" id="cbt-status-text">Checking...</span>
                         </div>
                     </div>
