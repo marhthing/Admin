@@ -24,7 +24,8 @@ if (isAuthenticated() && !isSessionExpired()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SFGS Migration System - Login</title>
+            <link rel="icon" type="image/png" href="./img/logo.JPG">
+    <title>SFGS Administration System - Login</title>
     <style>
         :root {
             --primary-color: #6366f1;
@@ -193,16 +194,8 @@ if (isAuthenticated() && !isSessionExpired()) {
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h1>Migration System</h1>
-            <p>SFGS to CBT Migration System</p>
-        </div>
-
-        <div class="security-notice">
-            <span>⚠️</span>
-            <div>
-                <strong>Security Notice:</strong><br>
-                This system handles sensitive database operations. Auto-logout after 5 minutes of inactivity.
-            </div>
+            <h1>SFGS Administration System</h1>
+            <p>Administration System</p>
         </div>
 
         <?php if (isset($error)): ?>

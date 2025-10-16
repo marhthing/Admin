@@ -41,8 +41,9 @@ $sessionInfo = getSessionInfo();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+            <link rel="icon" type="image/png" href="./img/logo.JPG">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CBT Results Management - SFGS System</title>
+    <title>CBT Results Management - SFGS</title>
     <style>
         :root {
             --primary: #6366f1;

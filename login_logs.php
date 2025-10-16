@@ -14,7 +14,8 @@ $sessionInfo = getSessionInfo();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Logs - CBT Sync</title>
+    <title>Login Logs - SFGS</title>
+            <link rel="icon" type="image/png" href="./img/logo.JPG">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -445,7 +446,7 @@ $sessionInfo = getSessionInfo();
             .logs-table td:nth-child(4) {
                 display: none !important;
             }
-            
+
             .logs-table th,
             .logs-table td {
                 font-size: 0.75rem;
@@ -576,7 +577,7 @@ $sessionInfo = getSessionInfo();
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000; min-width: 300px; padding: 1rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); animation: slideIn 0.3s ease;';
-            
+
             if (type === 'success') {
                 notification.style.background = '#dcfce7';
                 notification.style.color = '#166534';
@@ -590,10 +591,10 @@ $sessionInfo = getSessionInfo();
                 notification.style.color = '#1e40af';
                 notification.style.border = '1px solid #bfdbfe';
             }
-            
+
             notification.textContent = message;
             document.body.appendChild(notification);
-            
+
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.3s ease';
                 setTimeout(() => notification.remove(), 300);
@@ -657,7 +658,7 @@ $sessionInfo = getSessionInfo();
                 const logs = await response.json();
 
                 const tableBody = document.getElementById('logTable');
-                
+
                 if (logs.length === 0) {
                     tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem;">No logs found</td></tr>';
                 } else {
