@@ -150,10 +150,6 @@ $sessionInfo = getSessionInfo();
             color: white;
         }
 
-        .sidebar-nav a span {
-            font-size: 1.125rem;
-        }
-
         .main-content {
             flex: 1;
             padding: 1.5rem;

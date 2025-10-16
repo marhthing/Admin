@@ -180,10 +180,6 @@ $sessionInfo = getSessionInfo();
             color: white;
         }
 
-        .sidebar-nav a span {
-            font-size: 1.125rem;
-        }
-
         /* Mobile Bottom Bar */
         .bottom-bar {
             display: none;
