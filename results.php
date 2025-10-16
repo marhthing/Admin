@@ -419,6 +419,75 @@ $sessionInfo = getSessionInfo();
             opacity: 0.5;
         }
 
+        /* Mobile Cards View */
+        .results-cards {
+            display: none;
+        }
+
+        .result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .result-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-card-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .result-card-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .result-card-body {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-card-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .result-card-label {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-card-value {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .result-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--border);
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -527,6 +596,15 @@ $sessionInfo = getSessionInfo();
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 0.75rem;
+            }
+
+            /* Hide table, show cards on mobile */
+            .table-container {
+                display: none !important;
+            }
+
+            .results-cards {
+                display: block !important;
             }
 
             .modal-content {
@@ -670,6 +748,11 @@ $sessionInfo = getSessionInfo();
                             <!-- Results will be loaded here -->
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Mobile Cards View -->
+                <div class="results-cards" id="resultsCards">
+                    <!-- Cards will be loaded here on mobile -->
                 </div>
 
                 <div class="empty-state" id="emptyState" style="display: none;">
@@ -868,6 +951,7 @@ $sessionInfo = getSessionInfo();
                 }
 
                 const resultsTableBody = document.getElementById('resultsTableBody');
+                const resultsCards = document.getElementById('resultsCards');
                 const resultsCount = document.getElementById('resultsCount');
                 const emptyState = document.getElementById('emptyState');
                 const resultsTable = document.getElementById('resultsTable');
@@ -876,6 +960,7 @@ $sessionInfo = getSessionInfo();
 
                 if (data.results.length === 0) {
                     resultsTable.style.display = 'none';
+                    resultsCards.style.display = 'none';
                     emptyState.style.display = 'block';
                     return;
                 }
@@ -883,6 +968,7 @@ $sessionInfo = getSessionInfo();
                 resultsTable.style.display = 'table';
                 emptyState.style.display = 'none';
 
+                // Populate table for desktop
                 resultsTableBody.innerHTML = data.results.map(result => {
                     const percentage = result.total_marks > 0 ? Math.round((result.score / result.total_marks) * 100) : 0;
                     const badgeClass = getScoreBadgeClass(percentage);
@@ -907,6 +993,59 @@ $sessionInfo = getSessionInfo();
                                 </button>
                             </td>
                         </tr>
+                    `;
+                }).join('');
+
+                // Populate cards for mobile
+                resultsCards.innerHTML = data.results.map(result => {
+                    const percentage = result.total_marks > 0 ? Math.round((result.score / result.total_marks) * 100) : 0;
+                    const badgeClass = getScoreBadgeClass(percentage);
+
+                    return `
+                        <div class="result-card">
+                            <div class="result-card-header">
+                                <div>
+                                    <div class="result-card-title">${result.student_name || 'N/A'}</div>
+                                    <div class="result-card-subtitle">${result.reg_number || 'N/A'}</div>
+                                </div>
+                                <span class="score-badge ${badgeClass}">${percentage}%</span>
+                            </div>
+                            <div class="result-card-body">
+                                <div class="result-card-field">
+                                    <div class="result-card-label">Subject</div>
+                                    <div class="result-card-value">${result.subject || 'N/A'}</div>
+                                </div>
+                                <div class="result-card-field">
+                                    <div class="result-card-label">Class</div>
+                                    <div class="result-card-value">${result.class || 'N/A'}</div>
+                                </div>
+                                <div class="result-card-field">
+                                    <div class="result-card-label">Score</div>
+                                    <div class="result-card-value">${result.score || 0} / ${result.total_marks || 0}</div>
+                                </div>
+                                <div class="result-card-field">
+                                    <div class="result-card-label">Type</div>
+                                    <div class="result-card-value">${result.assignment_type || 'N/A'}</div>
+                                </div>
+                                <div class="result-card-field">
+                                    <div class="result-card-label">Term</div>
+                                    <div class="result-card-value">${result.term || 'N/A'}</div>
+                                </div>
+                                <div class="result-card-field">
+                                    <div class="result-card-label">Session</div>
+                                    <div class="result-card-value">${result.session || 'N/A'}</div>
+                                </div>
+                            </div>
+                            <div class="result-card-footer">
+                                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                                    ${result.date_taken ? new Date(result.date_taken).toLocaleDateString() : 'N/A'}
+                                </div>
+                                <button class="btn btn-danger" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;" 
+                                        onclick="showDeleteModal(${result.id}, '${result.student_name}', '${result.subject}')">
+                                    🗑️ Delete
+                                </button>
+                            </div>
+                        </div>
                     `;
                 }).join('');
 
