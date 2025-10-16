@@ -975,6 +975,7 @@ $sessionInfo = getSessionInfo();
                 <ul>
                     <li><a href="dashboard.php" class="active"><span class="icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/></svg></span> <span>Dashboard</span></a></li>
                     <li><a href="results.php"><span class="icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V2.5A1.5 1.5 0 0 1 1.5 1H3a.5.5 0 0 1 0 1H1.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V13a.5.5 0 0 1 1 0v.5a1.5 1.5 0 0 1-1.5 1.5h-11zM7 11.5a.5.5 0 0 1-.5-.5V8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L5.793 8H3.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zM15 2.5a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0 0 1h2.793L10.646 5.646a.5.5 0 0 0 .708.708L14 3.707V6.5a.5.5 0 0 0 1 0v-4z"/></svg></span> <span>CBT Results</span></a></li>
+                    <li><a href="settings.php"><span class="icon"><svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/></svg></span> <span>Settings</span></a></li>
                 </ul>
             </nav>
         </aside>
@@ -994,6 +995,12 @@ $sessionInfo = getSessionInfo();
                     </svg>
                     <span>Results</span>
                 </a>
+                <a href="settings.php" class="bottom-nav-item">
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                    </svg>
+                    <span>Settings</span>
+                </a>
             </div>
         </nav>
 
@@ -1004,111 +1011,31 @@ $sessionInfo = getSessionInfo();
             </div>
 
 
-            <!-- Top Section Grid: Database Status and Migration Controls -->
-            <div class="top-sections-grid">
-                <!-- Database Status Section -->
-                <div class="db-status-card">
-                        <h3>Database Connection Status</h3>
-                        <div class="db-connections">
-                            <div class="db-connection" id="sfgs-status">
-                                <div class="connection-indicator pending" id="sfgs-indicator"></div>
-                                <div class="connection-info">
-                                    <strong>SFGS Database</strong>
-                                    <span>if0_39795047_sfgs (Source)</span>
-                                    <span class="connection-status" id="sfgs-status-text">Checking...</span>
-                                </div>
-                            </div>
-                            <div class="db-connection" id="cbt-status">
-                                <div class="connection-indicator pending" id="cbt-indicator"></div>
-                                <div class="connection-info">
-                                    <strong>CBT Database</strong>
-                                    <span>if0_39795047_cbt (Target)</span>
-                                    <span class="connection-status" id="cbt-status-text">Checking...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="test-connections-btn" onclick="testDatabaseConnections()" id="testConnectionsBtn">
-                            Refresh Status
-                        </button>
-                    </div>
-
-                <!-- Migration Controls Section -->
-                <div class="migration-section">
-                        <div class="migration-header">
-                            <h3>Data Migration</h3>
-                            <p>Intelligent synchronization between SFGS and CBT systems</p>
-                        </div>
-
-                        <div class="security-notices">
-                            <div class="security-alert">
-                                <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/></svg></span>
-                                <strong>Security Enhanced:</strong> All passwords from SFGS (plain text) will be securely hashed before insertion into CBT database.
-                            </div>
-                            <div class="alert">
-                                <span class="alert-icon"><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.25rem;"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg></span>
-                                Smart sync mode: Existing data will be preserved and only missing or incorrect data will be updated.
-                            </div>
-                        </div>
-
-                        <div class="migration-controls">
-                            <button class="migrate-btn" onclick="startMigration()" id="migrateBtn">
-                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.5rem;">
-                                    <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-                                </svg>
-                                Start Smart Sync
-                            </button>
-                            <p class="migration-note">Click to begin intelligent data synchronization with detailed logging</p>
+            <!-- Database Status Section -->
+            <div class="db-status-card">
+                <h3>Database Connection Status</h3>
+                <div class="db-connections">
+                    <div class="db-connection" id="sfgs-status">
+                        <div class="connection-indicator pending" id="sfgs-indicator"></div>
+                        <div class="connection-info">
+                            <strong>SFGS Database</strong>
+                            <span>if0_39795047_sfgs (Source)</span>
+                            <span class="connection-status" id="sfgs-status-text">Checking...</span>
                         </div>
                     </div>
+                    <div class="db-connection" id="cbt-status">
+                        <div class="connection-indicator pending" id="cbt-indicator"></div>
+                        <div class="connection-info">
+                            <strong>CBT Database</strong>
+                            <span>if0_39795047_cbt (Target)</span>
+                            <span class="connection-status" id="cbt-status-text">Checking...</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="test-connections-btn" onclick="testDatabaseConnections()" id="testConnectionsBtn">
+                    Refresh Status
+                </button>
             </div>
-
-            <div class="data-mapping-section">
-                        <h3>Data Mapping Overview</h3>
-                        <div class="mapping-grid">
-                            <div class="mapping-item">
-                                <div class="mapping-source">sfgs.users</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.users</div>
-                                <div class="mapping-note">Admin accounts</div>
-                            </div>
-                            <div class="mapping-item">
-                                <div class="mapping-source">sfgs.teachers</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.users</div>
-                                <div class="mapping-note">Teacher accounts</div>
-                            </div>
-                            <div class="mapping-item">
-                                <div class="mapping-source">sfgs.students</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.users</div>
-                                <div class="mapping-note">Student accounts</div>
-                            </div>
-                            <div class="mapping-item">
-                                <div class="mapping-source">sfgs.classes</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.class_levels</div>
-                                <div class="mapping-note">Class structure</div>
-                            </div>
-                            <div class="mapping-item">
-                                <div class="mapping-source">sfgs.sessions</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.sessions</div>
-                                <div class="mapping-note">Academic sessions</div>
-                            </div>
-                            <div class="mapping-item">
-                                <div class="mapping-source">Standard terms</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.terms</div>
-                                <div class="mapping-note">Term structure</div>
-                            </div>
-                            <div class="mapping-item">
-                                <div class="mapping-source">sfgs.jss + sfgs.sss</div>
-                                <div class="mapping-arrow">→</div>
-                                <div class="mapping-target">cbt.subjects</div>
-                                <div class="mapping-note">Subjects (deduplicated)</div>
-                            </div>
-                        </div>
-                    </div>
 
             <div class="system-stats-section">
                         <h3>System Statistics</h3>
@@ -1138,70 +1065,10 @@ $sessionInfo = getSessionInfo();
                             <button class="action-btn" onclick="refreshSystemStats()" id="refreshStatsBtn">
                                 Refresh Stats
                             </button>
-                            <button class="action-btn secondary" onclick="clearLogs()">
-                                Clear Logs
-                            </button>
                         </div>
                     </div>
 
-            <div class="status-section">
-                <h3>Migration Status & Detailed Logs</h3>
-
-                <div class="status-grid">
-                    <div class="status-item" id="status-connection">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Database Connection Check</span>
-                    </div>
-                    <div class="status-item" id="status-admin">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Admin Migration (Password Hashing)</span>
-                    </div>
-                    <div class="status-item" id="status-teachers">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Teachers Migration (Password Hashing)</span>
-                    </div>
-                    <div class="status-item" id="status-students">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Students Migration (Password Hashing)</span>
-                    </div>
-                    <div class="status-item" id="status-classes">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Classes Migration</span>
-                    </div>
-                    <div class="status-item" id="status-sessions">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Sessions Migration</span>
-                    </div>
-                    <div class="status-item" id="status-terms">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Terms Migration</span>
-                    </div>
-                    <div class="status-item" id="status-subjects">
-                        <div class="status-icon status-pending">⏳</div>
-                        <span class="status-text">Subjects Migration (JSS + SSS)</span>
-                    </div>
-                </div>
-
-                <div class="progress-container">
-                    <div class="progress-text">Progress: <span id="progressText">0%</span></div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                </div>
-
-                <div class="summary-box" id="summaryBox">
-                    <h4><svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.5rem; vertical-align: text-bottom;"><path d="M1.5 14.5A1.5 1.5 0 0 1 0 13V2.5A1.5 1.5 0 0 1 1.5 1H3a.5.5 0 0 1 0 1H1.5a.5.5 0 0 0-.5.5v11a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5V13a.5.5 0 0 1 1 0v.5a1.5 1.5 0 0 1-1.5 1.5h-11zM7 11.5a.5.5 0 0 1-.5-.5V8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L5.793 8H3.5a.5.5 0 0 1 0-1h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5zM15 2.5a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0 0 1h2.793L10.646 5.646a.5.5 0 0 0 .708.708L14 3.707V6.5a.5.5 0 0 0 1 0v-4z"/></svg> Migration Summary</h4>
-                    <div class="summary-grid" id="summaryContent"></div>
-                </div>
-
-                <div class="log-container">
-                    <div class="log-area" id="logArea">
-                        <div style="color: #94a3b8;">Detailed migration logs will appear here...</div>
-                        <div style="color: #94a3b8;">Click "Start Smart Sync" to begin the secure process.</div>
-                        <div style="color: #fbbf24;">Note: All passwords will be converted from plain text to secure hash.</div>
-                    </div>
-                </div>
-            </div>
+            
         </main>
     </div>
 
@@ -1248,252 +1115,6 @@ $sessionInfo = getSessionInfo();
         ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
             document.addEventListener(event, resetSessionTimer, true);
         });
-
-        function log(message, type = 'info') {
-            const timestamp = new Date().toLocaleTimeString();
-            const logMessage = `[${timestamp}] ${message}`;
-
-            const logArea = document.getElementById('logArea');
-            const logDiv = document.createElement('div');
-            logDiv.textContent = logMessage;
-
-            const colors = {
-                error: '#f87171',
-                success: '#4ade80',
-                warning: '#fbbf24',
-                info: '#e2e8f0',
-                security: '#fb7185'
-            };
-            logDiv.style.color = colors[type] || colors.info;
-            logArea.appendChild(logDiv);
-            logArea.scrollTop = logArea.scrollHeight;
-        }
-
-        function updateStatus(statusId, state) {
-            const statusElement = document.getElementById(`status-${statusId}`);
-            const icon = statusElement.querySelector('.status-icon');
-
-            icon.className = `status-icon status-${state}`;
-
-            const icons = {
-                pending: '⏳',
-                running: '⏳',
-                success: '✓',
-                error: '✗'
-            };
-            icon.textContent = icons[state] || '⏳';
-        }
-
-        function updateProgress(percentage) {
-            const progressFill = document.getElementById('progressFill');
-            const progressText = document.getElementById('progressText');
-            progressFill.style.width = percentage + '%';
-            progressText.textContent = Math.round(percentage) + '%';
-        }
-
-        function showMigrationSummary(data) {
-            const summaryBox = document.getElementById('summaryBox');
-            const summaryContent = document.getElementById('summaryContent');
-
-            summaryContent.innerHTML = `
-                <div class="summary-item">
-                    <strong>Total Users</strong>
-                    ${data.total || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Admins</strong>
-                    ${data.admins || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Teachers</strong>
-                    ${data.teachers || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Students</strong>
-                    ${data.students || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Classes</strong>
-                    ${data.classes || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Sessions</strong>
-                    ${data.sessions || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Terms</strong>
-                    ${data.terms || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Subjects</strong>
-                    ${data.subjects || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Passwords Hashed</strong>
-                    ${data.passwords_hashed || 0}
-                </div>
-                <div class="summary-item">
-                    <strong>Duration</strong>
-                    ${data.duration || '0'}s
-                </div>
-            `;
-
-            summaryBox.classList.add('show');
-        }
-
-        async function callMigrationAPI(action, data = {}) {
-            try {
-                const response = await fetch('migrate.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ action, ...data })
-                });
-
-                const result = await response.json();
-
-                if (!result.success) {
-                    throw new Error(result.message || 'Unknown error occurred');
-                }
-
-                return result;
-            } catch (error) {
-                throw new Error(`API request failed: ${error.message}`);
-            }
-        }
-
-        async function startMigration() {
-            const migrateBtn = document.getElementById('migrateBtn');
-            const startTime = Date.now();
-
-            // Reset UI
-            migrateBtn.disabled = true;
-            migrateBtn.innerHTML = '<span>⏳</span> Syncing...';
-            document.getElementById('logArea').innerHTML = '';
-            document.getElementById('summaryBox').classList.remove('show');
-            updateProgress(0);
-
-            // Reset all status indicators
-            ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms', 'subjects'].forEach(id => {
-                updateStatus(id, 'pending');
-            });
-
-            log('Starting secure smart synchronization process...', 'info');
-            log('Security Mode: All passwords will be hashed before insertion', 'security');
-
-            try {
-                // Step 1: Test database connections
-                log('Testing database connections...', 'info');
-                updateStatus('connection', 'running');
-                const connectionResult = await callMigrationAPI('test_connection');
-                log('✓ Database connections successful', 'success');
-                updateStatus('connection', 'success');
-                updateProgress(10);
-
-                // Step 2: Migrate admins
-                log('Synchronizing admin users with password hashing...', 'info');
-                updateStatus('admin', 'running');
-                const adminResult = await callMigrationAPI('migrate_admins');
-                log(`✓ ${adminResult.message}`, 'success');
-                log(`Hashed ${adminResult.details?.passwords_hashed || 0} admin passwords`, 'security');
-                updateStatus('admin', 'success');
-                updateProgress(20);
-
-                // Step 3: Migrate teachers
-                log('Synchronizing teacher users with password hashing...', 'info');
-                updateStatus('teachers', 'running');
-                const teacherResult = await callMigrationAPI('migrate_teachers');
-                log(`✓ ${teacherResult.message}`, 'success');
-                log(`Hashed ${teacherResult.details?.passwords_hashed || 0} teacher passwords`, 'security');
-                updateStatus('teachers', 'success');
-                updateProgress(35);
-
-                // Step 4: Migrate students
-                log('Synchronizing student users with password hashing...', 'info');
-                updateStatus('students', 'running');
-                const studentResult = await callMigrationAPI('migrate_students');
-                log(`✓ ${studentResult.message}`, 'success');
-                log(`Hashed ${studentResult.details?.passwords_hashed || 0} student passwords`, 'security');
-                updateStatus('students', 'success');
-                updateProgress(50);
-
-                // Step 5: Migrate classes
-                log('Synchronizing classes...', 'info');
-                updateStatus('classes', 'running');
-                const classResult = await callMigrationAPI('migrate_classes');
-                log(`✓ ${classResult.message}`, 'success');
-                updateStatus('classes', 'success');
-                updateProgress(65);
-
-                // Step 6: Migrate sessions
-                log('Synchronizing sessions...', 'info');
-                updateStatus('sessions', 'running');
-                const sessionResult = await callMigrationAPI('migrate_sessions');
-                log(`✓ ${sessionResult.message}`, 'success');
-                updateStatus('sessions', 'success');
-                updateProgress(80);
-
-                // Step 7: Migrate terms
-                log('Synchronizing terms...', 'info');
-                updateStatus('terms', 'running');
-                const termResult = await callMigrationAPI('migrate_terms');
-                log(`✓ ${termResult.message}`, 'success');
-                updateStatus('terms', 'success');
-                updateProgress(85);
-
-                // Step 8: Migrate subjects
-                log('Synchronizing subjects from JSS and SSS tables...', 'info');
-                updateStatus('subjects', 'running');
-                const subjectResult = await callMigrationAPI('migrate_subjects');
-                log(`✓ ${subjectResult.message}`, 'success');
-                if (subjectResult.details) {
-                    log(`Combined ${subjectResult.details.jss_subjects} JSS + ${subjectResult.details.sss_subjects} SSS subjects`, 'info');
-                    log(`Deduplicated to ${subjectResult.details.total_unique_subjects} unique subjects`, 'info');
-                }
-                updateStatus('subjects', 'success');
-                updateProgress(95);
-
-                // Show completion summary
-                const duration = Math.round((Date.now() - startTime) / 1000);
-                const totalUsers = (adminResult.count || 0) + (teacherResult.count || 0) + (studentResult.count || 0);
-                const totalPasswordsHashed = (adminResult.details?.passwords_hashed || 0) + 
-                                           (teacherResult.details?.passwords_hashed || 0) + 
-                                           (studentResult.details?.passwords_hashed || 0);
-
-                log('Secure smart synchronization completed successfully!', 'success');
-                log(`Total passwords securely hashed: ${totalPasswordsHashed}`, 'security');
-                updateProgress(100);
-
-                showMigrationSummary({
-                    total: totalUsers,
-                    admins: adminResult.count,
-                    teachers: teacherResult.count,
-                    students: studentResult.count,
-                    classes: classResult.count,
-                    sessions: sessionResult.count,
-                    terms: termResult.count,
-                    subjects: subjectResult.count,
-                    passwords_hashed: totalPasswordsHashed,
-                    duration: duration
-                });
-
-            } catch (error) {
-                log(`❌ Synchronization failed: ${error.message}`, 'error');
-
-                // Mark any running status as error
-                ['connection', 'admin', 'teachers', 'students', 'classes', 'sessions', 'terms', 'subjects'].forEach(id => {
-                    const statusElement = document.getElementById(`status-${id}`);
-                    const icon = statusElement.querySelector('.status-icon');
-                    if (icon.classList.contains('status-running')) {
-                        updateStatus(id, 'error');
-                    }
-                });
-            } finally {
-                migrateBtn.disabled = false;
-                migrateBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.5rem;"><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/></svg> Start Smart Sync';
-            }
-        }
 
         // Database connection testing
         async function testDatabaseConnections() {
@@ -1574,9 +1195,6 @@ $sessionInfo = getSessionInfo();
         // Initialize
         window.onload = function() {
             startSessionTimer();
-            log('System initialized and ready for secure synchronization.', 'info');
-            log('Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
-            log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
 
             // Automatically test database connections on load
             setTimeout(() => {
@@ -1621,12 +1239,7 @@ $sessionInfo = getSessionInfo();
             }
         }
 
-        function clearLogs() {
-            document.getElementById('logArea').innerHTML = '';
-            log('System initialized and ready for secure synchronization.', 'info');
-            log('Security: All SFGS passwords (plain text) will be hashed before CBT insertion.', 'security');
-            log('Existing data will be preserved - only missing/incorrect data will be updated.', 'info');
-        }
+        
 
     </script>
 </body>
