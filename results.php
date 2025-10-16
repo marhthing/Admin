@@ -662,7 +662,16 @@ $sessionInfo = getSessionInfo();
             <div class="results-section">
                 <div class="results-header">
                     <h3 style="font-size: 1.125rem; font-weight: 600;">Student Results</h3>
-                    <div class="results-count" id="resultsCount">Loading...</div>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="results-count" id="resultsCount">Loading...</div>
+                        <button class="btn btn-primary" onclick="showExportModal()" style="padding: 0.625rem 1.25rem;">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                                <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                            Export Results
+                        </button>
+                    </div>
                 </div>
 
                 <div class="table-container">
@@ -716,6 +725,74 @@ $sessionInfo = getSessionInfo();
             <div class="modal-actions">
                 <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
                 <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Result</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Results Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <div class="modal-header">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 0.75rem;">
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                </svg>
+                <h3>Export Results</h3>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">Select filters to export specific results</p>
+                
+                <form id="exportForm">
+                    <div class="filters-grid" style="margin-bottom: 1.5rem;">
+                        <div class="filter-group">
+                            <label for="export_class">Class</label>
+                            <select name="class" id="export_class">
+                                <option value="">All Classes</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="export_term">Term</label>
+                            <select name="term" id="export_term">
+                                <option value="">All Terms</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="export_session">Session</label>
+                            <select name="session" id="export_session">
+                                <option value="">All Sessions</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="export_subject">Subject</label>
+                            <select name="subject" id="export_subject">
+                                <option value="">All Subjects</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="export_assignment_type">Assignment Type</label>
+                            <select name="assignment_type" id="export_assignment_type">
+                                <option value="">All Types</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeExportModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="exportResults('csv')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                        <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                    </svg>
+                    Export CSV
+                </button>
+                <button type="button" class="btn btn-primary" onclick="exportResults('pdf')">
+                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                        <path d="M4.603 14.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.697 19.697 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.188-.012.396-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.066.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.712 5.712 0 0 1-.911-.95 11.651 11.651 0 0 0-1.997.406 11.307 11.307 0 0 1-1.02 1.51c-.292.35-.609.656-.927.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.266.266 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.71 12.71 0 0 1 1.01-.193 11.744 11.744 0 0 1-.51-.858 20.801 20.801 0 0 1-.5 1.05zm2.446.45c.15.163.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.876 3.876 0 0 0-.612-.053zM8.078 7.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
+                    </svg>
+                    Export PDF
+                </button>
             </div>
         </div>
     </div>
@@ -879,10 +956,117 @@ $sessionInfo = getSessionInfo();
 
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('deleteModal');
-            if (event.target === modal) {
+            const deleteModal = document.getElementById('deleteModal');
+            const exportModal = document.getElementById('exportModal');
+            if (event.target === deleteModal) {
                 closeDeleteModal();
             }
+            if (event.target === exportModal) {
+                closeExportModal();
+            }
+        }
+
+        // Show export modal
+        function showExportModal() {
+            document.getElementById('exportModal').style.display = 'block';
+            loadExportFilterOptions();
+        }
+
+        // Close export modal
+        function closeExportModal() {
+            document.getElementById('exportModal').style.display = 'none';
+        }
+
+        // Load filter options for export modal
+        async function loadExportFilterOptions() {
+            try {
+                const response = await fetch('get_filter_options.php');
+                const data = await response.json();
+
+                if (!data.success) {
+                    console.error('Failed to load filter options:', data.message);
+                    return;
+                }
+
+                const filters = data.filters;
+
+                // Populate classes
+                const classSelect = document.getElementById('export_class');
+                classSelect.innerHTML = '<option value="">All Classes</option>';
+                filters.classes.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.name;
+                    option.textContent = cls.display_name || cls.name;
+                    classSelect.appendChild(option);
+                });
+
+                // Populate terms
+                const termSelect = document.getElementById('export_term');
+                termSelect.innerHTML = '<option value="">All Terms</option>';
+                filters.terms.forEach(term => {
+                    const option = document.createElement('option');
+                    option.value = term.name;
+                    option.textContent = term.name + ' Term';
+                    termSelect.appendChild(option);
+                });
+
+                // Populate sessions
+                const sessionSelect = document.getElementById('export_session');
+                sessionSelect.innerHTML = '<option value="">All Sessions</option>';
+                filters.sessions.forEach(session => {
+                    const option = document.createElement('option');
+                    option.value = session.name;
+                    option.textContent = session.name;
+                    sessionSelect.appendChild(option);
+                });
+
+                // Populate subjects
+                const subjectSelect = document.getElementById('export_subject');
+                subjectSelect.innerHTML = '<option value="">All Subjects</option>';
+                filters.subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.name;
+                    option.textContent = subject.name;
+                    subjectSelect.appendChild(option);
+                });
+
+                // Populate assignment types
+                const assignmentTypeSelect = document.getElementById('export_assignment_type');
+                assignmentTypeSelect.innerHTML = '<option value="">All Types</option>';
+                filters.assignment_types.forEach(type => {
+                    const option = document.createElement('option');
+                    option.value = type.test_type;
+                    option.textContent = type.test_type.charAt(0).toUpperCase() + type.test_type.slice(1);
+                    assignmentTypeSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('Error loading export filter options:', error);
+            }
+        }
+
+        // Export results
+        function exportResults(format) {
+            const classValue = document.getElementById('export_class').value;
+            const termValue = document.getElementById('export_term').value;
+            const sessionValue = document.getElementById('export_session').value;
+            const subjectValue = document.getElementById('export_subject').value;
+            const assignmentTypeValue = document.getElementById('export_assignment_type').value;
+
+            // Build query string
+            const params = new URLSearchParams();
+            params.set('format', format);
+            if (classValue) params.set('class', classValue);
+            if (termValue) params.set('term', termValue);
+            if (sessionValue) params.set('session', sessionValue);
+            if (subjectValue) params.set('subject', subjectValue);
+            if (assignmentTypeValue) params.set('assignment_type', assignmentTypeValue);
+
+            // Open export URL in new window to trigger download
+            window.open(`export_results.php?${params.toString()}`, '_blank');
+            
+            // Close modal
+            closeExportModal();
         }
 
         // Debounce timer for auto-filtering

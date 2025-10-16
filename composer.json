@@ -1,5 +1,6 @@
 {
     "require": {
-        "php": "*"
+        "php": "*",
+        "dompdf/dompdf": "^3.1"
     }
 }
