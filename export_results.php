@@ -92,8 +92,7 @@ function exportCSV($results) {
     // Create output stream
     $output = fopen('php://output', 'w');
     
-    // Add BOM for UTF-8
-    fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+    // Don't add BOM - it causes display issues
     
     // Add CSV headers
     fputcsv($output, [
@@ -116,6 +115,12 @@ function exportCSV($results) {
             ? round(($result['score'] / $result['total_marks']) * 100, 2) 
             : 0;
         
+        // Format term to include "Term" suffix
+        $term = $result['term'] ?? 'N/A';
+        if ($term !== 'N/A' && !stripos($term, 'term')) {
+            $term = $term . ' Term';
+        }
+        
         fputcsv($output, [
             $result['reg_number'] ?? 'N/A',
             $result['student_name'] ?? 'Unknown',
@@ -125,7 +130,7 @@ function exportCSV($results) {
             $result['score'] ?? 0,
             $result['total_marks'] ?? 0,
             $percentage . '%',
-            $result['term'] ?? 'N/A',
+            $term,
             $result['session'] ?? 'N/A',
             $result['date_taken'] ? date('Y-m-d', strtotime($result['date_taken'])) : 'N/A'
         ]);
