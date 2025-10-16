@@ -778,6 +778,34 @@ $sessionInfo = getSessionInfo();
         let sessionTimeRemaining = 300;
         let sessionTimer;
 
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 10000; min-width: 300px; padding: 1rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); animation: slideIn 0.3s ease;';
+            
+            if (type === 'success') {
+                notification.style.background = '#dcfce7';
+                notification.style.color = '#166534';
+                notification.style.border = '1px solid #bbf7d0';
+            } else if (type === 'error') {
+                notification.style.background = '#fee2e2';
+                notification.style.color = '#991b1b';
+                notification.style.border = '1px solid #fecaca';
+            } else {
+                notification.style.background = '#dbeafe';
+                notification.style.color = '#1e40af';
+                notification.style.border = '1px solid #bfdbfe';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
         function updateSessionTimer() {
             const minutes = Math.floor(sessionTimeRemaining / 60);
             const seconds = sessionTimeRemaining % 60;
@@ -785,8 +813,8 @@ $sessionInfo = getSessionInfo();
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
             if (sessionTimeRemaining <= 0) {
-                alert('Session expired. You will be redirected to login.');
-                logout();
+                showNotification('Session expired. You will be redirected to login.', 'info'); setTimeout(() => {
+                logout(); }, 2000);
                 return;
             }
 

@@ -508,6 +508,93 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetch_backups') {
             animation: spin 0.6s linear infinite;
         }
 
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            animation: modalSlideIn 0.2s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .modal-icon.warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .modal-icon.info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .modal-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: flex-end;
+        }
+
+        .modal-footer .btn {
+            min-width: 80px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 display: none;
@@ -590,9 +677,71 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetch_backups') {
         </main>
     </div>
 
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon">
+                    <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16" id="modalIconSvg"></svg>
+                </div>
+                <h3 class="modal-title" id="modalTitle"></h3>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
     <script>
         let sessionTimeRemaining = 300;
         let sessionTimer;
+
+        // Modal functions
+        function showModal(title, message, type = 'info', buttons = []) {
+            const modal = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalIconSvg = document.getElementById('modalIconSvg');
+            const modalFooter = document.getElementById('modalFooter');
+
+            modalTitle.textContent = title;
+            modalBody.textContent = message;
+
+            // Set icon and color
+            if (type === 'warning') {
+                modalIcon.className = 'modal-icon warning';
+                modalIconSvg.innerHTML = '<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>';
+            } else {
+                modalIcon.className = 'modal-icon info';
+                modalIconSvg.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>';
+            }
+
+            // Add buttons
+            modalFooter.innerHTML = '';
+            buttons.forEach(btn => {
+                const button = document.createElement('button');
+                button.className = `btn ${btn.class}`;
+                button.textContent = btn.text;
+                button.onclick = () => {
+                    closeModal();
+                    if (btn.action) btn.action();
+                };
+                modalFooter.appendChild(button);
+            });
+
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+
+        // Close modal when clicking overlay
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
 
         function updateSessionTimer() {
             const minutes = Math.floor(sessionTimeRemaining / 60);
@@ -601,8 +750,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetch_backups') {
                 `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
             if (sessionTimeRemaining <= 0) {
-                alert('Session expired. You will be redirected to login.');
-                logout();
+                showModal(
+                    'Session Expired',
+                    'Your session has expired. You will be redirected to login.',
+                    'info',
+                    [{ text: 'OK', class: 'btn-primary', action: logout }]
+                );
                 return;
             }
 
@@ -693,10 +846,18 @@ if (isset($_GET['action']) && $_GET['action'] == 'fetch_backups') {
         }
 
         async function deleteBackup(filename) {
-            if (!confirm(`Are you sure you want to delete ${filename}?`)) {
-                return;
-            }
+            showModal(
+                'Delete Backup',
+                `Are you sure you want to delete ${filename}? This action cannot be undone.`,
+                'warning',
+                [
+                    { text: 'Cancel', class: 'btn-secondary' },
+                    { text: 'Delete', class: 'btn-danger', action: () => confirmDeleteBackup(filename) }
+                ]
+            );
+        }
 
+        async function confirmDeleteBackup(filename) {
             try {
                 const formData = new FormData();
                 formData.append('ajax_delete', filename);
